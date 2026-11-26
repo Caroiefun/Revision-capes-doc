@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Réviser le CAPES doc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* VOICE : un coach de révision franc et encourageant, pour une adulte qui prépare un concours.
+   IDEA : le fichier de fiches bristol d'une étudiante, avec le surligneur jaune des notions à retenir.
+   PICTURE : une pile de fiches cornées en tête, qui montre la carte du jour ; puis l'exercice en cours.
+   COLOUR and TYPE : bleu outremer en aplat, fiches blanches, surligneur jaune, corail pour l'erreur ; Rubik + Atkinson Hyperlegible.
+   LAYOUT : bandeau outremer avec progression, onglets d'exercices, zone d'exercice centrée en une colonne. */
+:root{color-scheme:light dark;
+--bg:light-dark(#f3f4fb,#0f1330);--ink:light-dark(#151a3d,#eef0ff);--soft:light-dark(#4b5179,#b6bbe0);
+--ultra:#2433b8;--ultra2:light-dark(#2433b8,#7f8cff);--card:light-dark(#ffffff,#1a2050);--line:light-dark(#d9dcf0,#2f3670);
+--hl:#ffe14d;--hlsoft:light-dark(#fff4b0,#5a4f12);--ok:light-dark(#0f7a4f,#5be0a5);--oksoft:light-dark(#d9f5e8,#123d2c);
+--ko:#e8453c;--kosoft:light-dark(#fde0dd,#4a1a18)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Atkinson Hyperlegible",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.tab,.btn,.big{font-family:Rubik,system-ui,sans-serif}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.05;margin:0 0 10px;text-wrap:balance;font-weight:800}
+h2{font-size:26px;line-height:1.15;margin:0 0 12px;text-wrap:balance}
+h3{font-size:19px;margin:18px 0 6px}
+mark,.hl{background:linear-gradient(transparent 45%,var(--hl) 45%);color:inherit;padding:0 2px}
+:root[data-theme=dark] mark,:root[data-theme=dark] .hl{background:linear-gradient(transparent 45%,#8a7414 45%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) mark,:root:not([data-theme=light]) .hl{background:linear-gradient(transparent 45%,#8a7414 45%)}}
+.band{padding:clamp(24px,4vw,52px) max(5vw,16px)}
+.hero{background:var(--ultra);color:#fff;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:center}
+.hero p{color:#dfe3ff;margin:0 0 16px;max-width:60ch}
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{background:rgba(255,255,255,.12);border-radius:14px;padding:10px 14px;min-width:120px}
+.stat b{display:block;font:800 28px/1.1 Rubik,sans-serif}.stat span{font-size:14px;color:#dfe3ff}
+.bar{height:10px;background:rgba(255,255,255,.2);border-radius:9px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--hl);border-radius:9px;transition:width .4s}
+.pile{position:relative;height:250px}
+.pile .f{position:absolute;inset:18px 6% 0 10%;background:#fff;color:#151a3d;border-radius:12px;box-shadow:0 14px 30px rgba(5,10,60,.35);padding:20px 22px;overflow:hidden;
+background-image:repeating-linear-gradient(#fff 0 31px,#cfe0ff 31px 32px);background-position:0 54px}
+.pile .f:nth-child(1){transform:rotate(-6deg) translate(-14px,10px);opacity:.55}
+.pile .f:nth-child(2){transform:rotate(3deg) translate(10px,4px);opacity:.8}
+.pile .f:nth-child(3){border-top:10px solid var(--ko)}
+.pile small{font-size:13px;color:#4b5179}.pile .q{font:700 21px/1.25 Rubik,sans-serif;margin:6px 0 10px}
+.tabs{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding:10px max(5vw,16px)}
+.tab{flex:none;border:0;background:transparent;color:var(--soft);font-weight:500;font-size:16px;padding:10px 14px;border-radius:999px;cursor:pointer;min-height:44px}
+.tab[aria-current=true]{background:var(--ultra);color:#fff}
+.tab:focus-visible,.btn:focus-visible,.chip:focus-visible,input:focus-visible,textarea:focus-visible,.opt:focus-visible{outline:3px solid var(--hl);outline-offset:2px}
+.doms{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:500 15px Rubik,sans-serif;cursor:pointer;min-height:40px}
+.chip[aria-pressed=true]{background:var(--hlsoft);border-color:#c9a800}
+main{max-width:980px;margin:0 auto}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:0 2px 0 var(--line)}
+.lead{color:var(--soft);margin:0 0 16px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;font-size:16px;cursor:pointer;min-height:46px;background:var(--ultra2);color:#fff}
+.btn.sec{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.ok{background:#0f7a4f;color:#fff}.btn.ko{background:var(--ko);color:#fff}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.grow{flex:1}
+.fc{min-height:240px;border-radius:16px;border:1.5px solid var(--line);padding:24px;background:var(--card);background-image:repeating-linear-gradient(transparent 0 31px,var(--line) 31px 32px);background-position:0 70px;cursor:pointer}
+.fc .front{font:700 clamp(20px,3vw,26px)/1.3 Rubik,sans-serif}
+.fc .tag{display:inline-block;font:500 13px Rubik,sans-serif;background:var(--hlsoft);border-radius:6px;padding:2px 8px;margin-bottom:12px}
+.back{border-top:2px dashed var(--line);margin-top:16px;padding-top:14px}
+.back ul{margin:6px 0;padding-left:20px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px 14px;margin:8px 0;font:inherit;cursor:pointer;min-height:48px}
+.opt .box{flex:none;width:22px;height:22px;border:2px solid var(--soft);border-radius:6px;margin-top:2px}
+.opt.sel{border-color:var(--ultra2);background:color-mix(in srgb,var(--ultra2) 10%,var(--card))}.opt.sel .box{background:var(--ultra2);border-color:var(--ultra2)}
+.opt.good{border-color:var(--ok);background:var(--oksoft)}.opt.bad{border-color:var(--ko);background:var(--kosoft)}
+.fb{margin-top:14px;padding:12px 16px;border-radius:12px;background:var(--hlsoft)}
+.fb.good{background:var(--oksoft)}.fb.bad{background:var(--kosoft)}
+.match{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px}
+.match>div{display:flex;flex-direction:column;gap:8px}.match .opt{margin:0}
+.match .done{opacity:.55;border-color:var(--ok);background:var(--oksoft);cursor:default}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}.bar i{transition:none}}
+input[type=text],textarea{width:100%;font:16px/1.5 inherit;font-family:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px}
+textarea{min-height:150px;resize:vertical}
+.kw{display:inline-block;border-radius:8px;padding:2px 9px;margin:3px 4px 3px 0;font-size:15px}
+.kw.y{background:var(--oksoft);color:var(--ok)}.kw.n{background:var(--kosoft);color:var(--ko)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:14px}
+.col{border:2px dashed var(--line);border-radius:14px;padding:10px;min-height:90px}
+.col h4{margin:0 0 8px;font:700 15px Rubik,sans-serif}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 12px;margin:4px;cursor:pointer;font:500 15px Rubik,sans-serif;min-height:40px}
+.pill.good{border-color:var(--ok);background:var(--oksoft)}.pill.bad{border-color:var(--ko);background:var(--kosoft)}
+.order li{margin:6px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;align-items:start}
+.fiche{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--card)}
+.fiche h3{margin:0 0 4px}.fiche .m{color:var(--soft);font-size:15px}
+details summary{cursor:pointer;font-weight:700;padding:6px 0}
+.muted{color:var(--soft);font-size:15px}
+.cnt{font:700 15px Rubik,sans-serif;color:var(--soft)}
+footer{color:var(--soft);font-size:14px;text-align:center;padding:30px 16px 50px}
+@media(max-width:720px){.pile small:last-child{display:none}.hero{grid-template-columns:minmax(0,1fr)}.pile{height:200px}.pile .q{font-size:18px}.match{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="band hero">
+  <div>
+    <h1>Réviser l'écrit du CAPES doc</h1>
+    <p>Auteurs, titres, dates, thèses, notions, textes officiels : on se teste, on se trompe, on recommence. Ce que tu rates revient plus souvent.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="pile" aria-hidden="true"><div class="f"></div><div class="f"></div><div class="f" id="pileCard"></div></div>
+</header>
+<nav class="tabs" id="tabs" aria-label="Exercices"></nav>
+<main class="band">
+  <div class="doms" id="doms" role="group" aria-label="Domaines à réviser"></div>
+  <section id="view" class="panel" aria-live="polite"></section>
+</main>
+<footer>Contenu tiré de ton récap des textes (23 nov. 2026), de la fiche notions info-doc, des fiches EMI et CRCN, de la circulaire de 2017 et des rapports du jury 2025-2026. Ta progression reste dans ce navigateur.</footer>
+
+<script>
+{
+/* ======================= DONNÉES ======================= */
+const T=[
+{id:'t1',a:'Anne Cordier',k:'Cordier',y:2011,ti:"La recherche d'information sur Internet des collégiens : entre imaginaires, pratiques et prescriptions",s:"Documentaliste-Sciences de l'information, vol. 48, n° 1",th:'pratiques non formelles',
+these:"Les élèves ont déjà des pratiques d'Internet hors de l'école ; le prof doc doit s'appuyer sur elles au lieu de les disqualifier.",
+id3:["Enquête auprès d'élèves de 6e (observation au CDI + entretiens) : une approche écologique.","Pratiques « non formelles » plutôt qu'« informelles » : elles ont leurs propres règles.","Internet des jeunes / internet de l'école (Piette, 2005) : au CDI, la recherche est faite de prescriptions et de recadrages.","La médiation documentaire doit partir de ces pratiques comme d'un levier."],
+kw:['pratiques non formelles','approche écologique','prescriptions','recadrages','médiation documentaire','internet des jeunes'],
+mob:"Tout sujet sur les pratiques des élèves ou la posture du prof doc : l'antidote au mythe des « digital natives ».",trou:"Cordier préfère parler de pratiques ___ plutôt qu'« informelles ».",rep:['non formelles']},
+{id:'t2',a:'Cécile Gardiès',k:'Gardiès',y:2011,ti:"Le métier de professeur-documentaliste : interdépendance des savoirs",s:"In Fabre (coord.), Professeur-documentaliste : un tiers métier, Educagri",th:'interdépendance des savoirs',
+these:"Le métier de prof doc tient ensemble savoirs professionnels et savoirs disciplinaires : aucun ne doit dominer, car ils dépendent l'un de l'autre.",
+id3:["Les savoirs de référence du métier ne sont pas homogènes (métier jeune, situations variées).","Professionnalisation : passer de l'imitation et de l'expérience à une formation académique.","Bivalence : savoirs professionnels (gestion, technique, médiation) + savoirs disciplinaires (SIC).","Interdépendance des savoirs : le « tiers métier » se joue dans leur relation ; importance du rapport au savoir."],
+kw:['interdépendance des savoirs','bivalence','savoirs de référence','professionnalisation','tiers métier','rapport au savoir'],
+mob:"Identité du métier : enseignant ou documentaliste ? À croiser avec Blanquet et Maury.",trou:"Pour Gardiès, savoirs professionnels et disciplinaires sont dans un rapport d'___ des savoirs.",rep:['interdependance']},
+{id:'t3',a:'Alexandre Serres',k:'A. Serres',y:2009,ti:"Une certaine vision de la culture informationnelle",s:"Skhole.fr (séminaire Ars Industrialis)",th:'culture informationnelle',
+these:"Apprendre à chercher ne suffit pas : l'école doit transmettre une culture informationnelle, faire, comprendre et prendre du recul.",
+id3:["Critique de la « maîtrise de l'information » et du discours d'adaptation.","Culture informationnelle au sens éducatif (savoirs à transmettre), pas seulement sociologique.","Penser la technique (hypomnémata, Stiegler) ; tensions : hyper attention, horizontalité, popularité contre autorité.","Translittératie et les 3 R : réaliser, réfléchir, résister (repris de Mattelart, 2006)."],
+kw:['culture informationnelle','discours d\'adaptation','culture technique','translittératie','réaliser','réfléchir','résister'],
+mob:"Les 3 R donnent un plan tout prêt sur l'EMI ou l'IA (rapport du jury 2025). Duplessis les reformule : efficacité, intelligibilité, responsabilité.",trou:"Les 3 R d'Alexandre Serres : réaliser, réfléchir, ___.",rep:['resister']},
+{id:'t4',a:'Pascal Duplessis',k:'Duplessis',y:2010,ti:"La fiche-concept en didactique de l'information-documentation : outil d'acculturation professionnelle, support pour la construction des connaissances ?",s:"L'éducation à la culture informationnelle, Presses de l'Enssib",th:'fiche-concept',
+these:"La fiche-concept aide à construire des savoirs à enseigner en info-doc, et donc à légitimer la discipline.",
+id3:["Constat : l'info-doc manque de légitimité (pas d'examen, savoirs mal définis).","Outil emprunté aux SES, transposé en info-doc (transposition didactique).","Trois composantes : structurelle, contextuelle, didactique ; version élève et version prof.","Articule recherche et terrain ; à ne pas utiliser comme une recette."],
+kw:['fiche-concept','composante structurelle','contextuelle','didactique','transposition didactique','légitimité'],
+mob:"Didactique de l'info-doc et notions à enseigner. Ton exemple « agent conversationnel » est un bon exemple de copie.",trou:"La fiche-concept a trois composantes : structurelle, contextuelle et ___.",rep:['didactique']},
+{id:'t5',a:'Gilles Sahut',k:'Sahut',y:2025,ti:"Comment la compréhension des pratiques informationnelles des jeunes peut-elle contribuer à améliorer leur éducation aux médias et à l'information ?",s:"Note d'expert, conférence de consensus du Cnesco",th:'pratiques info des jeunes',
+these:"Partir des pratiques non formelles des jeunes donne du sens à l'EMI, à condition de tenir compte de leur grande diversité.",
+id3:["Accès : logique intentionnelle ou exposition fortuite (« news find me »).","Évaluation heuristique, indices sociaux : la popularité devient parfois autorité.","Autonomie informationnelle croissante avec l'âge.","Différences intra-générationnelles et pauvreté informationnelle ; obstacles : règlements, pratiques socialisées, hétérogénéité."],
+kw:['exposition fortuite','indices sociaux','heuristique','autonomie informationnelle','pauvreté informationnelle','intra-générationnelles'],
+mob:"La version actuelle de Cordier : nuance l'idée d'une jeunesse homogène.",trou:"Chez Sahut, les jeunes jugent l'information avec des indices ___ (likes, abonnés, avis des pairs).",rep:['sociaux']},
+{id:'t6',a:'Brigitte Simonnot',k:'Simonnot',y:2007,ti:"Évaluer l'information",s:"Documentaliste-Sciences de l'information, vol. 44, n° 3",th:"évaluation de l'information",
+these:"Avec le numérique, l'évaluation n'est plus faite en amont par l'éditeur : elle revient à l'usager, qu'il faut donc former.",
+id3:["Les critères d'Otlet sont brouillés : particularisation, économie de l'attention (Herbert Simon).","Validation des ressources ≠ évaluation des contenus ; jugement prédictif / évaluatif (Rieh).","On ne peut tout vérifier : autorité cognitive (Wilson, 1983), délégation de la confiance.","Trois « dragons » : propagande, surabondance, mésinformation."],
+kw:['autorité cognitive','économie de l\'attention','jugement prédictif','jugement évaluatif','délégation de la confiance','usager'],
+mob:"La référence sur l'évaluation. L'autorité cognitive sert pour tout sujet sur la fiabilité, les sources ou l'IA.",trou:"Simonnot reprend la notion d'autorité ___ de Patrick Wilson (1983).",rep:['cognitive']},
+{id:'t7',a:'Olivier Le Deuff',k:'Le Deuff',y:2012,ti:"Littératies informationnelles, médiatiques et numériques : de la concurrence à la convergence ?",s:"Études de communication, n° 38",th:'convergence des littératies',
+these:"Les éducations à l'information, aux médias et au numérique se font concurrence ; le numérique pousse à leur convergence, voire à une discipline.",
+id3:["Querelle des littératies : informationnelle, médiatique, numérique.","Origine utilitariste (« adaptionniste ») et discours de crise (Graff).","Convergence : culture de la participation, culture technique, translittératie, MIL de l'UNESCO.","Mythe des digital natives ; vers une disciplinarisation."],
+kw:['convergence des littératies','translittératie','utilitariste','culture de la participation','digital natives','disciplinarisation'],
+mob:"Place de l'EMI et statut de l'info-doc. Prolonge la translittératie d'A. Serres.",trou:"Le Deuff plaide pour la ___ des littératies.",rep:['convergence']},
+{id:'t8',a:'Mônica Macedo-Rouet',k:'Macedo-Rouet',y:2025,ti:"Comment permettre aux élèves de développer un esprit critique qui fasse sens avec leurs expériences quotidiennes ?",s:"Cnesco",th:'esprit critique',
+these:"L'expérience quotidienne ne suffit pas : l'esprit critique s'enseigne explicitement, avec une pratique guidée.",
+id3:["Esprit critique = ajuster sa confiance à la qualité des preuves et des sources.","Modèle MD-TRACE : tout dépend du modèle de tâche.","Études déclaratives (biais de désirabilité sociale) ; check-lists inefficaces.","Enseignement explicite + pratique guidée ; documents multiples en controverse, paramètres de source."],
+kw:['enseignement explicite','pratique guidée','check-lists','modèle de tâche','paramètres de source','esprit critique'],
+mob:"L'argument scientifique contre les grilles de critères. À associer à Simonnot et Sahut.",trou:"Pour Macedo-Rouet, l'esprit critique passe par un enseignement ___ et une pratique guidée.",rep:['explicite']},
+{id:'t9',a:'André Tricot',k:'Tricot',y:2011,ti:"Apprentissages et enseignement",s:"Médiadoc, n° 7",th:'apprentissage adaptatif',
+these:"L'apprentissage spontané ne suffit pas pour les savoirs récents : l'info-doc doit assumer un vrai enseignement, exigeant mais à la portée des élèves.",
+id3:["Apprentissage adaptatif (implicite) : gratuit, mais limité à ce qui est fréquent et utile.","Connaissances primaires (anciennes) / secondaires (récentes, à enseigner).","Tâche scolaire, connaissances déclaratives / procédurales, déficit d'utilité perçue.","Trois tentations : naturaliste, scolaire, renoncement ; partir des connaissances antérieures."],
+kw:['apprentissage adaptatif','connaissances secondaires','déficit d\'utilité perçue','trois tentations','tâche','connaissances antérieures'],
+mob:"Justifier qu'on enseigne l'info-doc au lieu de laisser faire. Contre-argument à l'optimisme de Michel Serres.",trou:"Pour Tricot, les connaissances ___ (écrit, info-doc) ne s'acquièrent pas par simple imprégnation.",rep:['secondaires']},
+{id:'t10',a:'Jean-Michel Salaün',k:'Salaün',y:2007,ti:"La redocumentarisation, un défi pour les sciences de l'information",s:"Études de communication, n° 30",th:'redocumentarisation',
+these:"Le numérique oblige à redocumentariser ; les sciences de l'information doivent revenir à leurs racines et s'ouvrir à l'interdisciplinarité.",
+id3:["Ordre documentaire ; quatre âges de l'imprimé jusqu'à l'âge des fichiers.","Documentarisation (Otlet, Dewey) puis redocumentarisation grâce aux métadonnées.","Trois dimensions du document (Pédauque) : forme, texte, médium (« vu, lu, su »).","Les infrastructures épistémiques créent la confiance par la sélection."],
+kw:['redocumentarisation','métadonnées','ordre documentaire','forme','texte','médium','infrastructures épistémiques'],
+mob:"La culture théorique du document. Fonde le rôle de sélection et de confiance du CDI face aux plateformes.",trou:"Les trois dimensions du document selon Pédauque : forme, texte et ___.",rep:['medium']},
+{id:'t11',a:'Mathilde Servet',k:'Servet',y:2010,ti:"Les bibliothèques troisième lieu : une nouvelle génération d'établissements culturels",s:"Bulletin des bibliothèques de France, n° 4",th:'bibliothèque troisième lieu',
+these:"La bibliothèque troisième lieu est un espace social et convivial qui démocratise la culture : une voie d'avenir, pas une dérive marchande.",
+id3:["Troisième lieu (Oldenburg) : ni foyer ni travail, lieu de sociabilité informelle.","Critères : neutre, d'habitués, comme à la maison, œcuménisme social.","Rupture avec le « temple du savoir » : confort, zoning, vocation sociale.","Usager omnivore, pas de hiérarchie culturelle ; réponse aux critiques consuméristes."],
+kw:['troisième lieu','Oldenburg','sociabilité','œcuménisme social','usager omnivore','lien social'],
+mob:"Espace et aménagement du CDI. À croiser avec Fabre.",trou:"Le troisième lieu est une notion de Ray ___.",rep:['oldenburg']},
+{id:'t12',a:'Michel Serres',k:'M. Serres',y:2011,ti:"Petite Poucette. Les nouveaux défis de l'éducation",s:"Discours à l'Académie française, 1er mars 2011",th:'Petite Poucette',
+these:"Le numérique a fait naître un nouvel humain, pour qui le savoir est partout : l'école, pensée pour un autre temps, doit se réinventer.",
+id3:["Un nouvel écolier : urbain, longévif, sans guerre, multiculturel.","Les médias forment une « société pédagogique » qui concurrence l'école ; espace topologique (de voisinages).","L'individu domine, fin de la « libido d'appartenance ».","Le savoir est distribué partout : mieux vaut une « tête bien faite » (Montaigne)."],
+kw:['Petite Poucette','société pédagogique','savoir distribué','tête bien faite','espace topologique','individu'],
+mob:"Si le savoir est partout, le prof doc apprend à le trouver, l'évaluer, l'organiser. À opposer à Cordier et Tricot.",trou:"Pour Michel Serres, le savoir est désormais ___ partout.",rep:['distribue']},
+{id:'t13',a:'Jean-Louis Durpaire',k:'Durpaire',y:2008,ti:"À la BM ou au CDI : les usages des collégiens et des lycéens",s:"Congrès de l'ABF, Reims",th:"usages du CDI et d'Internet",
+these:"Les élèves savent Internet indispensable mais en font un usage de consommation et de loisir : la médiation des profs docs et bibliothécaires doit les conduire vers la connaissance.",
+id3:["Contexte : socle commun (2005), importance de l'action locale.","Usages libres / usages prescrits du CDI ; politique documentaire : le CDI d'abord lieu des élèves, service public.","Enquête en Haute-Marne (~200 élèves) : effet « tribu », consommation et loisir.","Médiation partagée par profs docs et bibliothécaires."],
+kw:['usages libres','usages prescrits','politique documentaire','service public','consommation','médiation'],
+mob:"Ouverture et usages du CDI. Emploie « digital natives » sans recul, à l'inverse de Le Deuff et Cordier.",trou:"Durpaire distingue les usages ___ et les usages prescrits du CDI.",rep:['libres']},
+{id:'t14',a:'Yolande Maury',k:'Maury',y:2018,ti:"La nouvelle circulaire de missions des professeurs documentalistes : du choix des mots à l'ordre des priorités, essai de décryptage",s:"Médiadoc, n° 20",th:'circulaire de missions 2017',
+these:"La circulaire de 2017 renforce la mission pédagogique du prof doc, mais laisse dans l'ombre les savoirs de l'info-doc qu'il est censé enseigner.",
+id3:["« Information et médias » (formation) / « médias et information » (éducation).","Former (savoirs structurés, son domaine) / éduquer (transformation, partagé).","« Expert des SIC » mais verbes « contribuer, participer » ; savoirs de référence non précisés.","Culture informationnelle (Baltz) plutôt que culture de l'information ; appel à un curriculum."],
+kw:['former','éduquer','savoirs de référence','culture informationnelle','curriculum','médiation documentaire'],
+mob:"La formule : le prof doc forme à l'info-doc et contribue à éduquer aux médias et à l'information.",trou:"Selon Maury, le prof doc ___ à l'info-doc et contribue à éduquer à l'EMI.",rep:['forme']},
+{id:'t15',a:'Marie-France Blanquet',k:'Blanquet',y:2011,ti:"Enseigner a-t-il le même sens pour tous les enseignants ?",s:"Médiadoc, n° 6",th:"sens d'enseigner",
+these:"Le prof doc n'instruit pas, il montre : il enseigne par les documents et mène à l'autonomie ; la documentation réconcilie l'école et la vie.",
+id3:["Enseigner = instruire (école) ou montrer (hors école).","Le prof doc signale : il crée les routes d'accès au savoir ; statut hybride.","La documentation est un métasavoir plutôt qu'une discipline (paradoxe de la monodiscipline).","Doxa, zététique ; autodidaxie (Otlet) et autonomie comme mission centrale."],
+kw:['instruire','montrer','signale','métasavoir','statut hybride','autodidaxie'],
+mob:"Identité enseignante du prof doc. S'oppose à la disciplinarisation de Le Deuff.",trou:"Pour Blanquet, la documentation est un ___ plutôt qu'une discipline.",rep:['metasavoir']},
+{id:'t16',a:'Isabelle Fabre',k:'Fabre',y:2009,ti:"L'espace documentaire, dispositif de médiation de l'histoire de la pensée",s:"Médiadoc, n° 3",th:'espace documentaire',
+these:"Le CDI n'est pas un simple lieu de stockage : son organisation reflète celle des savoirs, il faut l'enseigner et la construire avec les élèves.",
+id3:["Le CDI souvent vu comme un « non-lieu » (Augé).","Espace par intention (le prof doc) / espace à réception (les élèves) ; besoin de territoire.","Espace transitionnel, dispositif de médiation, artefact (Jeanneret) : didactiser l'espace.","Co-construction, identité documentaire, usager-rechercheur."],
+kw:['non-lieu','espace par intention','espace à réception','dispositif de médiation','didactiser l\'espace','co-construction'],
+mob:"L'espace comme outil pédagogique. Servet pour la sociabilité, Fabre pour les apprentissages.",trou:"Fabre propose de ___ l'espace : apprendre aux élèves pourquoi le CDI est organisé ainsi.",rep:['didactiser']},
+{id:'t17',a:'Bertrand Calenge',k:'Calenge',y:2006,ti:"Quand peut-on établir qu'une bibliothèque dispose d'une politique documentaire ?",s:"Bulletin des bibliothèques de France, t. 51, n° 1",th:'politique documentaire',
+these:"Une politique documentaire est un processus collectif, pas un outil : l'équipe cherche ensemble l'effet de son activité sur la population.",
+id3:["Critiques : déculturation (Seguin), « inquisition managériale » (David).","Trois dérives : alibi incantatoire, dérive techniciste, illusion ingénierique.","« Ce n'est pas la hache qui fait le bûcheron » ; rétroaction vertueuse ; stock et flux.","Bibliothèque critique ; le bibliothécaire accompagne la population."],
+kw:['processus','collectif','alibi incantatoire','dérive techniciste','illusion ingénierique','stock','flux'],
+mob:"Politique documentaire et gestion du fonds. Les trois dérives font une partie critique toute prête.",trou:"Pour Calenge, la politique documentaire est un ___, pas un outil.",rep:['processus']}
+];
+const E=[
+{id:'e1',a:"Ministère de l'Éducation nationale",k:'Référentiel 2013',y:2013,ti:"Référentiel des compétences professionnelles des métiers du professorat et de l'éducation",d:"arrêté du 1er juillet 2013",c:"Compétences propres aux profs docs : maîtriser les savoirs de l'EMI, mettre en œuvre la politique documentaire, assurer la responsabilité du centre de ressources, ouvrir l'établissement."},
+{id:'e2',a:'Anne Cordier, Angèle Stalder',k:'Cordier & Stalder',y:2017,ti:"Modes d'appréhension et de dissémination des cultures de l'information dans l'École : les conditions de la reliance",d:'2017',c:"Reliance (Morin) ; cultures de l'information au pluriel ; l'École comme organisation apprenante ; transfert des apprentissages."},
+{id:'e3',a:'Nicole Boubée',k:'Boubée',y:2019,ti:"La formation des professeur·e·s documentalistes, l'instant d'après",d:'juin 2019',c:"Centralité des SIC dans la formation ; risque d'invisibilisation de l'info-doc dans l'EMI ; éducation critique à l'information."},
+{id:'e4',a:'Yolande Maury, Alexandre Serres',k:'Maury & Serres',y:2010,ti:"Les cultures informationnelles : définitions, approches, enjeux",d:'2010',c:"Polysémie de « culture » et « information » ; histoire du concept (information literacy) ; place de la technique et finalités."},
+{id:'e5',a:'DILA (Vie publique)',k:'Vie publique',y:2025,ti:"L'éducation aux médias, L'essentiel de Vie publique n° 12",d:'mars 2025',c:"Histoire et finalités de l'EMI ; « déserts d'EMI » ; surabondance et désinformation ; cadre juridique ; IA."},
+{id:'e6',a:"Ministère de l'Éducation nationale, DNE",k:'Lettre ÉduNum',y:2023,ti:"Lettre ÉduNum EMI n° 1",d:'mai 2023',c:"Évaluation de l'information ; lecture numérique ; enseignement explicite ; pistes pour la classe."},
+{id:'e7',a:'Stéphanie Parmentier',k:'Parmentier',y:2023,ti:"La littérature jeunesse sous influences",d:'décembre 2023',c:"Webtoon ; auteurs amateurs, influenceurs littéraires ; effet du cadre technique de la plateforme sur la création et la lecture."},
+{id:'e8',a:'Pascal Duplessis',k:'Duplessis 2017',y:2017,ti:"Les notions essentielles de l'information-documentation",d:'décembre 2017',c:"Concept intégrateur et notions organisatrices ; onze propositions de notions noyaux (2000-2016) ; triple enjeu épistémologique, pédagogique, psychologique."},
+{id:'e9',a:'Christine Détrez',k:'Détrez',y:2011,ti:"Les adolescents et la lecture, quinze ans après",d:'août 2011',c:"Contre l'idée reçue « les jeunes ne lisent plus » ; dimension affective de la lecture ; manga ; pratiques culturelles."},
+{id:'e10',a:'Karine Aillerie',k:'Aillerie',y:2010,ti:"Les pratiques de recherche d'information informelles des jeunes sur internet",d:'2010 (colloque de Lille, 2008)',c:"Recherche scolaire et personnelle suivent la même démarche, mais initiative, motivation et maîtrise du besoin d'information sont du côté personnel ; remet en cause l'« autodidaxie générationnelle »."}
+];
+const N=[
+{id:'n1',n:'Information',p:"Un contenu qui a du sens pour quelqu'un et lui apprend quelque chose.",s:'code, donnée, droit de l\'information, économie de l\'information, média, message, structuration, type d\'information',dk:"Donnée → information → connaissance → savoir.",
+id3:["Une donnée devient information quand elle a du sens pour quelqu'un ; elle devient connaissance quand il se l'approprie.","L'information a aussi une dimension économique (économie de l'attention) et juridique (droit de l'information).","Avec Document, c'est l'une des deux notions présentes chez presque tous les auteurs depuis 2000 (Duplessis 2017) : un fondamental absolu."],
+ex:"Comparer une même actualité racontée par un tweet, un journal télévisé et un article.",champ:"Recul critique sur les médias et l'information ; responsabilité légale et éthique.",au:"A. Serres (notion fondamentale) ; Gardiès (concepts fondateurs, 2011) ; Simonnot (économie de l'attention)."},
+{id:'n2',n:'Document',p:"Un support qui contient des informations, créé par un auteur dans une intention de communication.",s:'document numérique, primaire / secondaire, genre documentaire, nature physique, périodicité, publication, structure, support',dk:"Document primaire (l'œuvre) / secondaire (la notice, le catalogue).",
+id3:["Définition FADBEN, niveau 6e : « Le document utilise un support qui contient des informations. Il est créé par un auteur. » Au niveau suivant, on ajoute l'intention de communication.","Document primaire (l'œuvre, l'article) / document secondaire (la notice, le catalogue, la bibliographie qui le décrivent).","Le numérique bouleverse le document : contenus instables, détachés de leur auteur, qu'il faut redocumentariser."],
+ex:"En 6e, trier des objets du CDI : qu'ont en commun tous les documents ?",champ:"Environnements informationnels et numériques.",au:"Ballarini-Santonocito (« Voyage en info-doc » en 6e) ; Frisch ; Salaün (redocumentarisation, 3 dimensions du document)."},
+{id:'n3',n:'Source',p:"L'origine d'une information : qui la produit, dans quel but, peut-on s'y fier ?",s:'auteur, bibliographie, citation, discours, édition, nature, référence bibliographique, statut, validité',dk:"La source n'est pas le site où l'on a trouvé l'info, mais qui l'a produite et dans quelle intention.",
+id3:["La source, c'est qui produit l'information et dans quelle intention, pas l'endroit où on l'a trouvée.","Quatre entrées (Ballarini-Santonocito) : les acteurs (auteur, édition), les intentions (discours, nature, statut), l'évaluation (validité), l'identification (référence, bibliographie).","Les élèves jugent souvent la source par des indices sociaux (popularité) plutôt que par l'autorité de l'auteur."],
+ex:"Identifier qui parle derrière trois sites sur un même sujet.",champ:"Environnements informationnels et numériques.",au:"A. Serres (crédibilité, autorité, fiabilité) ; Simonnot (autorité cognitive) ; Sahut (indices sociaux) ; Macedo-Rouet (paramètres de source)."},
+{id:'n4',n:'Indexation',p:"Décrire le contenu d'un document par des mots choisis pour pouvoir le retrouver.",s:'classement, index, indexation automatisée, documentaire, libre, langage documentaire, métadonnée, mot clé',dk:"Indexation contrôlée (thésaurus) / libre (tags) / automatisée (moteurs).",
+id3:["Trois formes : contrôlée (langage documentaire, thésaurus), libre (tags, hashtags), automatisée (moteurs de recherche).","Les métadonnées décrivent un document pour qu'on le retrouve : c'est le pont entre indexation et recherche.","Avec le web, les thésaurus cèdent la place aux tags et aux moteurs, mais la question reste la même : comment retrouver ?"],
+ex:"Comparer les hashtags d'un réseau social et les mots-clés du catalogue du CDI.",champ:"Processus d'information et de documentation.",au:"Frisch (techniques et langage documentaires) ; Gardiès (analyse documentaire) ; Salaün (métadonnées)."},
+{id:'n5',n:'Espace informationnel',p:"Un lieu, physique ou numérique, organisé pour donner accès à l'information.",s:'base de données, bibliothèque, blog, catalogue, centre de ressources, forum, messagerie, réseau documentaire, site web',dk:"Espace organisé par des professionnels / espace organisé par des algorithmes.",
+id3:["Certains espaces sont organisés par des professionnels (CDI, catalogue, base de données), d'autres par des algorithmes (web, réseaux sociaux).","La notion permet de comparer le CDI à tous les lieux où les élèves s'informent réellement.","Le CDI lui-même est un espace à comprendre : son organisation reflète celle des savoirs."],
+ex:"Comparer le CDI, une encyclopédie en ligne et un réseau social : qui organise, comment, pour quoi ?",champ:"Les quatre champs : environnements, recul critique et responsabilité (c'est la notion la plus transversale).",au:"Cordier (pratiques réelles) ; Fabre (didactiser l'espace) ; Servet (troisième lieu)."},
+{id:'n6',n:"Recherche d'information",p:"La démarche pour trouver une information qui répond à un besoin.",s:'besoin d\'information, interface, méthodologie, moteur, navigation, opérateur, outil, requête',dk:"Le besoin d'information vient avant l'outil ; bruit / silence.",
+id3:["Le besoin d'information vient avant l'outil : une requête efficace traduit un besoin clairement formulé.","Bruit (trop de résultats non pertinents) / silence (résultats pertinents non trouvés).","Les élèves suivent la même démarche à l'école et chez eux, mais ils ne maîtrisent leur besoin d'information que dans leurs recherches personnelles."],
+ex:"Formuler une requête dans le catalogue puis dans un moteur de recherche, et comparer les résultats.",champ:"Processus d'information et de documentation.",au:"Cordier (Grandir connectés) ; A. Serres (stratégie, opérateurs) ; Aillerie (maîtrise du besoin)."},
+{id:'n7',n:"Exploitation de l'information",p:"Ce qu'on fait de l'info trouvée : la juger, la trier, la reformuler, produire.",s:'analyse, éthique, évaluation, pertinence, prise de notes, production documentaire, résumé, synthèse',dk:"Pertinence (répond à mon besoin ?) / fiabilité (puis-je m'y fier ?).",
+id3:["Pertinence (l'information répond-elle à mon besoin ?) / fiabilité (puis-je m'y fier ?) : une information peut être fiable mais non pertinente.","L'évaluation s'enseigne explicitement ; les grilles de critères seules ne suffisent pas.","L'éthique (citer, ne pas plagier) fait partie de l'exploitation, jusqu'à la production."],
+ex:"Passer de la prise de notes à une synthèse qui cite correctement ses sources.",champ:"Processus d'information et de documentation ; recul critique.",au:"Simonnot ; Sahut ; Macedo-Rouet (enseignement explicite) ; A. Serres (éthique et droit)."}
+];
+const REP=[
+{id:'r1',n:"Repères historiques des notions",c:"De la logique de savoir-faire (« faire une recherche ») à la logique de savoirs à enseigner (« comprendre ce qu'est une source »).",
+id3:["1993 : 3e congrès FADBEN (Marseille), la réflexion s'oriente vers une didactique de l'information.","1997 : référentiel de compétences des élèves (FADBEN) ; Charbonnier propose huit notions.","2003 : Assises nationales pour l'éducation à l'information ; naît l'idée d'un curriculum documentaire.","2007 : 64 notions et 7 notions organisatrices (Médiadoc). 2010 : Wikinotions. 2014 : 4 champs (APDEN). 2017 : synthèse de Duplessis."],
+mob:"Le tournant à citer : du référentiel de compétences (1997) aux savoirs scolaires (2007)."},
+{id:'r2',n:"Les 4 champs de l'APDEN (2014)",c:"Les 7 notions regroupées en 4 champs ; une notion peut figurer dans plusieurs champs.",
+id3:["Environnements informationnels et numériques : espace informationnel, document, source.","Processus d'information et de documentation : indexation, recherche d'information, exploitation.","Recul critique sur les médias, les TIC et l'information : information, espace informationnel, exploitation.","Responsabilité légale et éthique relative à l'information : information, espace informationnel."],
+mob:"Publié dans « Vers un curriculum en information-documentation » (2e éd., 2015) : utile pour un sujet sur la progression ou le curriculum."},
+{id:'r3',n:"Pourquoi des notions ? Les enjeux",c:"Les notions prouvent qu'il existe des contenus propres à l'info-doc.",
+id3:["Duplessis (2017) : un triple enjeu, épistémologique (structurer les contenus), pédagogique (organiser des progressions spiralaires), psychologique (adapter aux élèves).","Ballarini-Santonocito (2007) : enjeux de professionnalisation, didactiques, pédagogiques, éducatifs et scientifiques.","Quatre sources des savoirs enseignés : les SIC, les pratiques sociales des élèves, les pratiques professionnelles expertes, les pratiques scolaires.","Les notions sont stables, mais la manière de les enseigner reste libre : cours, co-enseignement, projet."],
+mob:"Argument central dès qu'un sujet porte sur ce que le prof doc enseigne ; donne un contenu à l'axe 1 de la circulaire de 2017."}
+];
+const V=[
+{id:'v1',t:'Concept intégrateur',w:'Develay',d:"Une notion qui en emboîte d'autres « à la manière des poupées gigognes »."},
+{id:'v2',t:'Transposition didactique',w:'Chevallard',d:"Le passage d'un savoir savant à un savoir enseignable."},
+{id:'v3',t:'Modèle opératoire du concept',w:'Britt-Mari Barth',d:"Étiquette + attributs + exemples et contre-exemples."},
+{id:'v4',t:'Curriculum',w:'Perrenoud',d:"Plus qu'un programme : contenus, progression et conditions de mise en œuvre."},
+{id:'v5',t:'Trame notionnelle',w:'Develay',d:"Le réseau de liens entre les notions d'une discipline."},
+{id:'v6',t:'Notion organisatrice',w:'FADBEN 2007',d:"Le nom donné par la FADBEN à ses 7 concepts intégrateurs."}
+];
+const O=[
+{id:'o1',n:"Circulaire de missions des « personnels exerçant dans les CDI »",y:1986,d:"circulaire n° 86-123 du 13 mars 1986",c:"Détaillait des compétences (démarche de recherche). Abrogée par la circulaire de 2017.",
+id3:["Premier texte national qui définit les missions des personnels de CDI.","Une logique de compétences et de méthode : former les élèves à la démarche de recherche documentaire.","Un texte resté en vigueur plus de trente ans, alors que le métier s'est transformé (CAPES en 1989, numérique, EMI).","Abrogé et remplacé par la circulaire de 2017."],
+mob:"Pour montrer l'évolution du métier : de la méthode de recherche (1986) aux savoirs et à la culture de l'information (2017). Maury fait cette comparaison."},
+{id:'o2',n:"Création du CAPES de documentation",y:1989,d:"1989",c:"Le métier devient un métier d'enseignant recruté par concours.",
+id3:["Le documentaliste devient un professeur, recruté par concours comme les autres.","C'est la base de l'identité enseignante du métier.","La circulaire de 2017 rappelle en préambule l'existence du CAPES de documentation."],
+mob:"Pour un sujet sur l'identité enseignante du prof doc, avec Gardiès (professionnalisation) et Blanquet (statut hybride)."},
+{id:'o3',n:"7 notions organisatrices et 64 notions essentielles (FADBEN)",y:2007,d:"Médiadoc, mars 2007",c:"Information, document, source, indexation, espace informationnel, recherche d'information, exploitation de l'information.",
+id3:["Ce n'est pas un texte officiel : c'est la proposition de l'association professionnelle (FADBEN, aujourd'hui APDEN).","7 notions organisatrices, qui regroupent chacune 8 notions : 64 notions en tout, avec deux niveaux de formulation (6e et terminale).","Le tournant didactique : on passe des compétences (référentiel de 1997) aux savoirs scolaires.","Le corpus est prolongé par le Wikinotions (2010) et regroupé en 4 champs par l'APDEN (2014)."],
+mob:"Dès qu'un sujet porte sur ce que le prof doc enseigne : ces notions prouvent qu'il existe des contenus propres à l'info-doc (Duplessis 2017, triple enjeu)."},
+{id:'o4',n:"Loi de refondation de l'École",y:2013,d:"loi n° 2013-595 du 8 juillet 2013",c:"Introduit l'éducation aux médias et à l'information dans les missions de l'École.",
+id3:["Elle charge l'École de former un citoyen capable de s'informer et d'agir de façon autonome dans la société de l'information et de la communication.","L'EMI apparaît dans la loi : c'est le point de départ des textes EMI qui suivent (programmes de 2015, Orientations de 2016).","Les Orientations EMI des cycles 2 et 3 s'appuient explicitement sur elle."],
+mob:"Pour ancrer l'EMI dans le cadre légal, avant de citer les programmes et la circulaire de 2017."},
+{id:'o5',n:"Référentiel des compétences professionnelles",y:2013,d:"arrêté du 1er juillet 2013 (BO n° 30)",c:"4 compétences propres au prof doc : savoirs de l'EMI, politique documentaire, centre de ressources, ouverture de l'établissement.",
+id3:["Il fixe les compétences communes à tous les professeurs et personnels d'éducation, puis des compétences propres à chaque métier.","Les 4 compétences propres au prof doc (D1 à D4) : maîtriser les connaissances et compétences propres à l'EMI ; mettre en œuvre la politique documentaire de l'établissement qu'il contribue à définir ; assurer la responsabilité du centre de ressources et de la diffusion de l'information ; contribuer à l'ouverture de l'établissement sur son environnement.","C'est le cadre de référence cité par la circulaire de 2017."],
+mob:"Pour tout sujet sur les missions : il complète la circulaire de 2017 et place la politique documentaire au cœur du métier (avec Calenge)."},
+{id:'o6',n:"Programme du cycle 4 : rubrique EMI",y:2015,d:"programmes de 2015",c:"4 compétences : utiliser les médias de manière autonome ; exploiter l'information de manière raisonnée ; utiliser les médias de manière responsable ; produire, communiquer, partager.",
+id3:["L'EMI est prise en charge par tous les enseignements : tous les professeurs, dont les profs docs, en sont responsables.","Trois visées : une connaissance critique de l'environnement informationnel et documentaire du XXIe siècle ; une maîtrise progressive de sa démarche d'information ; un usage sûr, légal et éthique de la publication et de la diffusion.","Comprendre les médias et les phénomènes informationnels dans toutes leurs dimensions (économique, sociétale, technique, éthique) ; lire de façon critique ; produire et diffuser soi-même.","Seul texte de programme où l'EMI est explicite. L'APDEN a regretté la disparition de la liste des notions entre le projet et le texte final."],
+mob:"Le texte à citer pour une séquence au collège. La critique de l'APDEN rejoint celle de Maury : des compétences, mais pas de savoirs structurés."},
+{id:'o7',n:"Orientations pour l'EMI, cycles 2 et 3 (CSP)",y:2016,d:"15 décembre 2016",c:"Texte non prescriptif, 4 champs ; le prof doc coordonne l'EMI en fin de cycle 3.",
+id3:["Il comble un manque : au cycle 2 et 3, l'EMI n'était qu'évoquée dans les programmes.","4 champs de compétences : rechercher et exploiter l'information ; écrire, créer, publier ; droits et responsabilités ; espace informationnel et médias.","Une progression : au cycle 2 l'élève découvre, guidé ; au cycle 3 il gagne en autonomie.","Principes : transversalité, égalité, socle commun, apprendre en faisant, finalité citoyenne. Le prof doc coordonne l'EMI en fin de cycle 3."],
+mob:"Pour la liaison école-collège et la 6e. Limite à citer : des compétences sans contenus notionnels, et le risque de dilution par la transversalité."},
+{id:'o8',n:"Circulaire de missions des professeurs documentalistes",y:2017,d:"circulaire n° 2017-051 du 28 mars 2017 (BO n° 13 du 30 mars 2017)",c:"3 axes : enseignant et maître d'œuvre d'une culture de l'information et des médias ; maître d'œuvre de l'organisation des ressources ; acteur de l'ouverture de l'établissement.",
+id3:["Pourquoi : la société de l'information, l'évolution des pratiques et l'essor du numérique imposent de renforcer la mission pédagogique.","Le prof doc est membre à part entière de l'équipe pédagogique ; il a la responsabilité du CDI, « lieu de formation, de lecture, de culture et d'accès à l'information ».","Axe 1 : enseignant et maître d'œuvre de l'acquisition par les élèves d'une culture de l'information et des médias. Il peut intervenir seul, en co-enseignement ou dans des travaux disciplinaires et interdisciplinaires.","Axe 2 : maître d'œuvre de l'organisation des ressources documentaires et de leur mise à disposition (politique documentaire). Axe 3 : acteur de l'ouverture de l'établissement sur son environnement éducatif, culturel et professionnel.","Elle abroge la circulaire de 1986 et emploie l'intitulé « professeur documentaliste »."],
+mob:"Le texte central : le jury 2026 demande d'appuyer la réflexion sur les trois axes. Lecture critique avec Maury (former / éduquer, savoirs de référence absents). Attention : ne pas commencer une introduction par « la circulaire de missions »."},
+{id:'o9',n:"Décret sur les obligations de service",y:2014,d:"décret n° 2014-940 du 20 août 2014",c:"Statut commun aux autres professeurs ; intitulé « professeur documentaliste ».",
+id3:["Il redéfinit les obligations de service et les missions de tous les enseignants du second degré.","Les profs docs y sont traités dans des dispositions communes à celles des autres professeurs.","La circulaire de 2017 reprend l'intitulé « professeur documentaliste » conformément à ce décret."],
+mob:"Pour appuyer l'identité enseignante du prof doc, avec la circulaire de 2017."},
+{id:'o10',n:"Cadre de référence des compétences numériques (CRCN)",y:2019,d:"décret n° 2019-919 du 30 août 2019",c:"5 domaines, 16 compétences, 8 niveaux ; remplace le B2i ; évalué et certifié par Pix.",
+id3:["Un référentiel commun de l'école au supérieur, inspiré du cadre européen DigComp.","5 domaines : information et données ; communication et collaboration ; création de contenus ; protection et sécurité ; environnement numérique.","8 niveaux en 4 paliers (novice, indépendant, avancé, expert) ; il remplace le B2i depuis la rentrée 2019.","Pix évalue et certifie : en 3e et en terminale ; le domaine 1 (recherche et veille) recoupe le cœur du métier."],
+mob:"Distinguer le cadre (CRCN), l'outil (Pix) et la culture visée (EMI) : la certification ne suffit pas à construire une culture de l'information."},
+{id:'o11',n:"Arrêté fixant les modalités du CAPES interne",y:2021,d:"arrêté du 25 janvier 2021",c:"Écrit de 5 h : note de synthèse, réflexion personnelle, bordereau (référence, résumé indicatif, mots-clés).",
+id3:["Écrit (5 h, coefficient 1) : un dossier de 3 à 5 documents sur le système éducatif, les sciences de l'éducation et les SIC.","Trois travaux : une note de synthèse ; une réflexion personnelle qui prend en compte les missions du prof doc ; la référence bibliographique et l'analyse (résumé indicatif, mots-clés) d'un ou deux documents.","Oral (coefficient 2) : un dossier de 10 pages maximum, un exposé de 15 minutes puis un entretien de 45 minutes."],
+mob:"Pas à citer dans une copie, mais à connaître pour gérer ton temps le jour de l'écrit."},
+{id:'o12',n:"Rapport Bronner « Les Lumières à l'ère numérique »",y:2022,d:"remis le 11 janvier 2022",c:"Désordres informationnels, vigilance cognitive ; 30 recommandations dont faire de l'esprit critique et de l'EMI une grande cause nationale.",
+id3:["Une commission de 14 experts présidée par le sociologue Gérald Bronner, commandée par le président de la République.","Constat : les fausses informations sont minoritaires, mais les réseaux sociaux affaiblissent la vigilance cognitive ; biais de confirmation, logique algorithmique d'engagement.","Le raisonnement analytique protège : mieux vaut prévenir que corriger.","Recommandations sur l'EMI : en faire une grande cause nationale, systématiser la formation à l'école, créer un continuum de l'école à la société civile."],
+mob:"Pour tout sujet sur la désinformation ou l'esprit critique, avec Macedo-Rouet et Sahut."},
+{id:'o13',n:"Circulaire « Généralisation de l'EMI »",y:2022,d:"24 janvier 2022 (BO n° 4 du 27 janvier 2022)",c:"Référent académique EMI et cellule académique ; « une webradio, un parrain » dans chaque collège.",
+id3:["Finalité : former des citoyens éclairés et responsables, capables de s'informer de façon autonome avec esprit critique.","L'EMI est transversale, du cycle 2 au lycée, dans tous les enseignements, notamment par les professeurs documentalistes.","Pilotage : un référent académique EMI et une cellule académique (CLEMI, DRANE, DAAC, inspection).","« Une webradio, un parrain » : une webradio parrainée par un média dans chaque collège volontaire ; Réseau Canopé et le CLEMI forment les enseignants."],
+mob:"Pour un sujet sur l'EMI comme affaire de tous ou sur les partenariats (axe 3 de la circulaire de 2017)."},
+{id:'o14',n:"Vadémécum « Généraliser l'EMI de la maternelle au lycée »",y:2024,d:"janvier 2024, éduscol",c:"Éducation aux médias et par les médias ; 4 chapitres ; concerne tous les enseignants.",
+id3:["Conçu par le ministère avec le CLEMI, en lien avec le ministère de la Culture ; il remplace la version de 2022.","Il s'adresse à tous les enseignants et aux personnels d'encadrement.","Il articule l'éducation aux médias et l'éducation par les médias, en classe ou en action éducative, seul ou en partenariat.","Quatre chapitres : notions et enjeux ; l'EMI dans le projet éducatif ; exemples de séquences ; ressources."],
+mob:"Le texte le plus récent sur l'EMI : à citer pour montrer que tu connais l'actualité institutionnelle."},
+{id:'o15',n:"Note de service Pix",y:2026,d:"note de service du 23 janvier 2026 (BO n° 6 du 5 février 2026)",c:"Cadre le dispositif Pix des élèves : attestation en 6e, parcours IA, certification en 3e et en terminale.",
+id3:["6e : attestation de sensibilisation au numérique, obligatoire.","Cycle 4 et lycée : parcours Pix de rentrée ; parcours IA en 4e, en 2de et en 1re année de CAP.","Certification Pix en 3e, puis en terminale (niveau attendu : indépendant 2).","Le CDI peut être le lieu des parcours Pix, dont un parcours EMI ; le prof doc peut être référent Pix."],
+mob:"Pour un sujet sur l'IA ou le numérique : un exemple concret et récent de mise en œuvre au collège et au lycée."}
+];
+const DEB=[
+{id:'d1',q:"Les jeunes sont-ils compétents d'office ?",cols:['Oui','Non'],items:[['M. Serres',0],['Durpaire',0],['Cordier',1],['Aillerie',1],['Tricot',1],['Le Deuff',1],['Sahut',1],['Macedo-Rouet',1]],e:"M. Serres (Petite Poucette) et Durpaire (digital natives) disent oui ; tous les autres montrent que les pratiques spontanées ne suffisent pas."},
+{id:'d2',q:"L'info-doc doit-elle devenir une discipline ?",cols:['Oui','Non','Synthèse'],items:[['Le Deuff',0],['Duplessis',0],['Maury',0],['Blanquet',1],['Gardiès',2]],e:"Le Deuff (disciplinarisation), Duplessis et Maury (savoirs, curriculum) : oui. Blanquet : non, c'est un métasavoir. Gardiès : le tiers métier."},
+{id:'d3',q:"Former pour s'adapter ou pour comprendre ?",cols:["Refusent l'adaptation seule","Rappellent qu'il faut enseigner l'utile"],items:[['A. Serres',0],['Le Deuff',0],['Tricot',1],['Macedo-Rouet',1]],e:"A. Serres (discours d'adaptation) et Le Deuff (vision utilitariste) visent la compréhension ; Tricot et Macedo-Rouet rappellent que même l'utile ne s'apprend pas seul."},
+{id:'d4',q:"Le CDI, c'est surtout…",cols:['Un lieu de sociabilité','Un outil d\'apprentissage','Un service et une politique'],items:[['Servet',0],['Fabre',1],['Durpaire',2],['Calenge',2]],e:"Servet : troisième lieu ; Fabre : dispositif de médiation à didactiser ; Durpaire et Calenge : lieu des élèves, service public, politique documentaire."}
+];
+const SUJ=[
+{id:'s1',q:"Intelligence artificielle générative : quel rôle pour le professeur documentaliste ?",pb:"Dans quelle mesure l'IA générative oblige-t-elle le professeur documentaliste à renouveler sa mission de formation sans en changer la nature ?",plan:["I. Réaliser : savoir utiliser l'IA (CRCN, parcours Pix IA)","II. Réfléchir : comprendre comment elle produit ses réponses (fiche-concept, redocumentarisation)","III. Résister : évaluer, garder l'autorité cognitive, enseigner explicitement"],au:{"A. Serres":"les 3 R comme plan","Simonnot":"autorité cognitive, délégation de la confiance","Macedo-Rouet":"enseignement explicite de l'évaluation","Duplessis":"fiche-concept « agent conversationnel »","Salaün":"redocumentariser des contenus sans auteur"},of:"Circulaire 2017 (axe 1) ; CRCN et parcours Pix IA ; vadémécum EMI 2024."},
+{id:'s2',q:"Partir des pratiques informationnelles des élèves pour enseigner : une évidence ?",pb:"Les pratiques non formelles des élèves sont-elles un point d'appui ou un obstacle pour la formation info-documentaire ?",plan:["I. Des pratiques réelles et légitimes","II. Mais qui ne valent pas compétence","III. Un enseignement explicite qui part d'elles"],au:{"Cordier":"pratiques non formelles, approche écologique","Sahut":"diversité, pauvreté informationnelle","Aillerie":"fin de l'autodidaxie générationnelle","Tricot":"connaissances antérieures, précurseurs ou obstacles","Macedo-Rouet":"l'expérience ne suffit pas"},of:"Orientations EMI C2-C3 (apprendre en faisant) ; programme cycle 4."},
+{id:'s3',q:"Le professeur documentaliste est-il un enseignant comme les autres ?",pb:"Comment le professeur documentaliste peut-il affirmer une identité enseignante tout en assumant un statut hybride ?",plan:["I. Un enseignant reconnu par les textes","II. Un enseignement différent : montrer, signaler","III. Le tiers métier : articuler savoirs professionnels et disciplinaires"],au:{"Blanquet":"instruire / montrer, statut hybride","Gardiès":"bivalence, interdépendance des savoirs","Maury":"former / éduquer","Duplessis":"savoirs à enseigner, notions"},of:"Circulaire 2017 ; décret 2014-940 ; référentiel 2013."},
+{id:'s4',q:"L'interdisciplinarité dans les missions du professeur documentaliste : leviers et freins (sujet 2026)",pb:"Dans quelle mesure le professeur documentaliste peut-il s'affirmer comme un opérateur de l'interdisciplinarité malgré les contraintes du système éducatif ?",plan:["I. Une position nodale : regard extra-disciplinaire, EMI transversale","II. Des freins : statut, temps, invisibilisation de l'info-doc","III. Des leviers : politique documentaire, co-enseignement, parcours EMI"],au:{"Blanquet":"métasavoir transdisciplinaire","Le Deuff":"convergence des littératies","Boubée":"invisibilisation de l'info-doc dans l'EMI","Calenge":"politique documentaire collective","Gardiès":"tiers métier"},of:"Circulaire 2017 (co-enseignements) ; circulaire EMI 2022 ; rapport du jury 2026."},
+{id:'s5',q:"Évaluer l'information à l'heure de la désinformation",pb:"Comment former des élèves capables d'ajuster leur confiance aux sources, quand la popularité tend à remplacer l'autorité ?",plan:["I. Un déplacement de l'évaluation vers l'usager","II. Des élèves qui évaluent par heuristiques","III. Enseigner explicitement l'évaluation"],au:{"Simonnot":"évaluation déplacée, autorité cognitive","Sahut":"indices sociaux","A. Serres":"popularité contre autorité","Macedo-Rouet":"contre les check-lists, paramètres de source","Salaün":"infrastructures épistémiques et confiance"},of:"Rapport Bronner 2022 ; circulaire EMI 2022 ; Lettre ÉduNum EMI n° 1."},
+{id:'s6',q:"Le CDI, lieu de vie ou lieu d'apprentissage ?",pb:"Comment l'aménagement et la politique du CDI peuvent-ils concilier sociabilité et apprentissages ?",plan:["I. Un lieu de sociabilité : le troisième lieu","II. Un dispositif de médiation à didactiser","III. Une politique documentaire collective, pensée pour les élèves"],au:{"Servet":"troisième lieu","Fabre":"espace par intention / à réception, didactiser l'espace","Durpaire":"usages libres et prescrits, service public","Calenge":"processus collectif"},of:"Circulaire 2017 (axe 2) ; référentiel 2013."},
+{id:'s7',q:"L'EMI, l'affaire de tous ?",pb:"Si l'EMI est l'affaire de tous, quelle est la place spécifique du professeur documentaliste ?",plan:["I. Une éducation transversale voulue par les textes","II. Le risque de dilution et d'invisibilisation","III. Former à l'info-doc, contribuer à éduquer à l'EMI"],au:{"Maury":"former / éduquer","Boubée":"invisibilisation","Le Deuff":"convergence, disciplinarisation","A. Serres":"translittératie"},of:"Circulaire 2017 ; Orientations C2-C3 (coordination fin cycle 3) ; circulaire EMI 2022 ; vadémécum 2024."},
+{id:'s8',q:"Le document à l'ère numérique",pb:"Que reste-t-il du document quand les contenus circulent sans auteur, sans date et sans source ?",plan:["I. Un ordre documentaire bouleversé","II. Redocumentariser : métadonnées, sources","III. Faire de la notion de document un savoir à enseigner"],au:{"Salaün":"redocumentarisation, 3 dimensions","A. Serres":"hypomnémata, culture technique","Simonnot":"ressources évolutives","Duplessis":"notions organisatrices"},of:"7 notions organisatrices (FADBEN 2007)."},
+{id:'s9',q:"Le professeur documentaliste et la lecture des adolescents",pb:"Comment le professeur documentaliste peut-il accompagner des pratiques de lecture qui se transforment ?",plan:["I. Les jeunes lisent, autrement","II. Des lectures sous influences (plateformes, prescripteurs)","III. Le CDI, lieu de lecture et de culture"],au:{"Détrez":"les jeunes lisent encore, dimension affective","Parmentier":"webtoon, influenceurs","Servet":"usager omnivore","Fabre":"identité documentaire"},of:"Circulaire 2017 (CDI, lieu de lecture et de culture)."}
+];
+const QH=[
+['officiel',"Quelle est la référence de la circulaire de missions des professeurs documentalistes ?",["n° 2017-051 du 28 mars 2017","n° 86-123 du 13 mars 1986","n° 2022-024 du 24 janvier 2022","n° 2019-919 du 30 août 2019"],[0],"Circulaire n° 2017-051 du 28 mars 2017, BO n° 13 du 30 mars 2017. Elle abroge celle de 1986."],
+['officiel',"Coche les trois axes de la circulaire de 2017.",["Enseignant et maître d'œuvre de l'acquisition par les élèves d'une culture de l'information et des médias","Maître d'œuvre de l'organisation des ressources documentaires et de leur mise à disposition","Acteur de l'ouverture de l'établissement sur son environnement éducatif, culturel et professionnel","Référent numérique de l'établissement","Responsable du parcours Avenir"],[0,1,2],"Les trois axes, dans cet ordre. Le jury 2026 demande d'appuyer la réflexion sur eux."],
+['officiel',"Quel texte la circulaire de 2017 abroge-t-elle ?",["La circulaire de 1986 sur les « personnels exerçant dans les CDI »","Le référentiel de 2013","Le décret de 2014","Les Orientations EMI de 2016"],[0],"Circulaire n° 86-123 du 13 mars 1986."],
+['officiel',"Dans la circulaire de 2017, le CDI est défini comme un lieu de…",["formation, de lecture, de culture et d'accès à l'information","silence et de travail personnel","stockage des manuels","vie scolaire"],[0],"« lieu de formation, de lecture, de culture et d'accès à l'information »."],
+['officiel',"Le CRCN compte…",["5 domaines, 16 compétences, 8 niveaux","7 notions, 64 sous-notions","4 champs, 2 cycles","3 axes, 4 compétences"],[0],"Décret du 30 août 2019 ; inspiré du DigComp européen."],
+['officiel',"Quel domaine du CRCN recoupe le plus le cœur de métier du prof doc ?",["1. Information et données","3. Création de contenus","4. Protection et sécurité","5. Environnement numérique"],[0],"Notamment 1.1 Mener une recherche et une veille d'information."],
+['officiel',"Les 4 compétences EMI du cycle 4 (2015) : coche celles qui en font partie.",["Utiliser les médias et les informations de manière autonome","Exploiter l'information de manière raisonnée","Utiliser les médias de manière responsable","Produire, communiquer, partager des informations","Programmer un algorithme simple"],[0,1,2,3],"Programmer relève de la technologie et du CRCN (3.4), pas de l'EMI cycle 4."],
+['officiel',"Les Orientations EMI cycles 2 et 3 (CSP, 2016) sont…",["un texte d'orientation non prescriptif","un programme obligatoire","une circulaire de missions","un arrêté"],[0],"Seul le cycle 4 a une rubrique EMI dans les programmes de 2015."],
+['officiel',"Selon les Orientations C2-C3, qui coordonne le travail d'EMI en fin de cycle 3 ?",["Le professeur documentaliste","Le professeur de français","Le référent numérique","Le CPE"],[0],"Appui institutionnel pour la liaison école-collège."],
+['officiel',"Que met en place la circulaire EMI du 24 janvier 2022 ? (plusieurs réponses)",["Un référent académique EMI","Une cellule académique EMI","« Une webradio, un parrain » dans chaque collège","Une épreuve d'EMI au brevet"],[0,1,2],"Pas d'épreuve d'EMI au brevet."],
+['officiel',"Le rapport Bronner (janvier 2022) s'intitule…",["Les Lumières à l'ère numérique","Grandir connectés","Dans le labyrinthe","Submersion"],[0],"Commission présidée par Gérald Bronner, 30 recommandations."],
+['officiel',"Le vadémécum EMI de janvier 2024 invite à articuler…",["éducation aux médias et éducation par les médias","EMI et éducation physique","CRCN et B2i","formation et inspection"],[0],"« Généraliser l'EMI de la maternelle au lycée »."],
+['officiel',"Quelle compétence n'est PAS propre au prof doc dans le référentiel de 2013 ?",["Évaluer les élèves par une note chiffrée","Mettre en œuvre la politique documentaire","Assurer la responsabilité du centre de ressources","Contribuer à l'ouverture de l'établissement"],[0],"Les 4 compétences propres : savoirs de l'EMI, politique documentaire, centre de ressources, ouverture."],
+['notions',"Combien de notions organisatrices la FADBEN a-t-elle fixées en 2007 ?",["7","4","10","64"],[0],"7 notions organisatrices, 64 notions essentielles en tout."],
+['notions',"Coche les 7 notions organisatrices (FADBEN 2007).",["Information","Document","Source","Indexation","Espace informationnel","Recherche d'information","Exploitation de l'information","Identité numérique","Média"],[0,1,2,3,4,5,6],"Identité numérique et média n'en sont pas : média est une sous-notion d'« Information »."],
+['notions',"« Métadonnée » est une sous-notion de…",["Indexation","Source","Document","Exploitation de l'information"],[0],"Le pont entre indexation et recherche."],
+['notions',"« Pertinence » est une sous-notion de…",["Exploitation de l'information","Recherche d'information","Source","Information"],[0],"Pertinence ≠ fiabilité."],
+['notions',"« Validité de la source » est une sous-notion de…",["Source","Document","Information","Espace informationnel"],[0],""],
+['notions',"Une information fiable mais qui ne répond pas à mon besoin est…",["fiable mais non pertinente","pertinente mais non fiable","du bruit","du silence"],[0],"Pertinence = répond au besoin ; fiabilité = on peut s'y fier."],
+['notions',"Des résultats pertinents que la requête n'a pas trouvés, c'est…",["du silence","du bruit","de l'indexation libre","de la redocumentarisation"],[0],"Le bruit, ce sont les résultats non pertinents."],
+['notions',"Quel est le triple enjeu des notions selon Duplessis (2017) ?",["Épistémologique, pédagogique, psychologique","Juridique, éthique, économique","Réaliser, réfléchir, résister","Former, éduquer, accompagner"],[0],"Structurer les contenus, organiser des progressions, adapter aux élèves."],
+['notions',"En 2014, l'APDEN regroupe les 7 notions en…",["4 champs","3 axes","5 domaines","2 cycles"],[0],"Environnements informationnels, processus, recul critique, responsabilité légale et éthique."],
+['notions',"Le passage de la logique de compétences à celle de savoirs scolaires se fait entre…",["le référentiel FADBEN de 1997 et les notions de 2007","la circulaire de 1986 et celle de 2017","le B2i et Pix","le CAPES 1989 et le référentiel 2013"],[0],"Le tournant didactique du métier."],
+['notions',"Le « modèle opératoire du concept » (étiquette, attributs, exemples et contre-exemples) vient de…",["Britt-Mari Barth","Michel Develay","Yves Chevallard","Philippe Perrenoud"],[0],"Duplessis s'en inspire pour la fiche-concept."],
+['epreuve',"Combien dure l'épreuve écrite d'admissibilité du CAPES interne de documentation ?",["5 heures","4 heures","6 heures","3 heures"],[0],"Coefficient 1. L'admission (oral sur dossier) est coefficient 2."],
+['epreuve',"Coche les trois travaux de l'écrit.",["Une note de synthèse","Une réflexion personnelle","La référence bibliographique et l'analyse (résumé indicatif, mots-clés) d'un ou deux documents","Un commentaire de texte littéraire","Une séquence pédagogique complète"],[0,1,2],"Arrêté du 25 janvier 2021."],
+['epreuve',"Pour la réflexion personnelle, le jury attend…",["une démonstration problématisée appuyée sur des auteurs et les missions du métier","un catalogue de séquences pédagogiques","un résumé des documents du dossier","une introduction commençant par « à l'heure du numérique »"],[0],"Le jury cite « à l'heure du numérique » et « la circulaire de mission » comme débuts stéréotypés à éviter."],
+['epreuve',"Le « je » dans la réflexion personnelle est…",["autorisé, sans excès","interdit","obligatoire à chaque paragraphe","réservé à la conclusion"],[0],"Il marque l'engagement ; le rapport 2026 le juge parfois nécessaire."],
+['epreuve',"Le développement de la réflexion personnelle s'appuie surtout sur…",["tes connaissances (auteurs, textes, expérience)","les documents du dossier uniquement","des citations de mémoire du sujet","des statistiques inventées"],[0],"Rapport 2025 : sur les connaissances du candidat, pas sur les documents du dossier."]
+];
+const OPEN=[
+['officiel','Cite les trois axes de la circulaire de missions de 2017.',[["culture de l'information","culture de l information"],["ressources"],["ouverture"]],"1. Enseignant et maître d'œuvre de l'acquisition par les élèves d'une culture de l'information et des médias. 2. Maître d'œuvre de l'organisation des ressources documentaires de l'établissement et de leur mise à disposition. 3. Acteur de l'ouverture de l'établissement sur son environnement éducatif, culturel et professionnel."],
+['officiel',"Quelles sont les 4 compétences propres au prof doc dans le référentiel de 2013 ?",[["emi","medias et a l'information","medias et a l information"],["politique documentaire"],["centre de ressources","ressources"],["ouverture","ouvrir"]],"Maîtriser les savoirs de l'EMI ; mettre en œuvre la politique documentaire ; assurer la responsabilité du centre de ressources ; ouvrir l'établissement sur son environnement."],
+['officiel',"Donne les 4 compétences EMI du cycle 4.",[["autonome"],["raisonnee"],["responsable"],["produire","partager","communiquer"]],"Utiliser les médias et les informations de manière autonome ; exploiter l'information de manière raisonnée ; utiliser les médias de manière responsable ; produire, communiquer, partager des informations."],
+['officiel',"Distingue CRCN, Pix et EMI en deux phrases.",[["cadre","referentiel"],["pix"],["certif","evalue"],["culture"]],"Le CRCN est le cadre (5 domaines, 16 compétences, 8 niveaux), Pix l'outil qui évalue et certifie ; l'EMI est la culture de l'information et des médias à construire, au-delà de la certification."],
+['notions',"Cite les 7 notions organisatrices.",[["information"],["document"],["source"],["indexation"],["espace"],["recherche"],["exploitation"]],"Information, document, source, indexation, espace informationnel, recherche d'information, exploitation de l'information (FADBEN, Médiadoc, mars 2007)."],
+['notions',"Qu'est-ce qu'un concept intégrateur ? Qui l'a proposé ?",[["develay"],["gigogne","emboite","englobe"]],"Une notion qui en emboîte d'autres à la manière des poupées gigognes et distingue l'essentiel de l'accessoire (Michel Develay)."],
+['notions',"Différence entre pertinence et fiabilité ?",[["besoin"],["confiance","fier"]],"Pertinence : l'info répond-elle à mon besoin ? Fiabilité : puis-je m'y fier ? Une info peut être fiable mais non pertinente."],
+['epreuve',"Quelles sont les étapes d'une introduction de réflexion personnelle ?",[["contexte","actualite","accroche"],["problematique"],["plan"]],"Contextualiser (de préférence par l'actualité générale ou professionnelle, sans début stéréotypé), poser la problématique, annoncer le plan."]
+];
+/* questions ouvertes générées : thèse de chaque texte */
+T.forEach(t=>OPEN.push(['textes',`Quelle est la thèse de ${t.a} dans « ${t.ti} » (${t.y}) ? Cite les grosses idées.`,t.kw.slice(0,4).map(k=>[norm(k)]),t.these+' '+t.id3.join(' ')]));
+const CONC=[
+['Pratiques non formelles','Cordier',"Pratiques hors de l'école, qui ont leurs propres règles."],['Approche écologique','Cordier',"Étudier les pratiques dans leur environnement."],
+['Interdépendance des savoirs','Gardiès',"Savoirs professionnels et disciplinaires dépendent l'un de l'autre."],['Tiers métier','Gardiès',"Le métier se joue dans la relation entre savoir-faire et savoirs scientifiques."],
+['Culture informationnelle','A. Serres',"Savoirs, culture technique et esprit critique, au-delà de la maîtrise de l'information."],['Hypomnémata','A. Serres',"Supports de mémoire extérieurs qui transforment notre façon de penser (Stiegler)."],['Discours d\'adaptation','A. Serres',"Former à s'adapter aux outils du moment plutôt qu'à comprendre."],
+['Fiche-concept','Duplessis',"Outil pour présenter un concept selon ses composantes structurelle, contextuelle et didactique."],
+['Exposition fortuite','Sahut',"L'information arrive toute seule (« news find me »)."],['Pauvreté informationnelle','Sahut',"Exclusion d'une information efficace faute de compétences de base."],['Indices sociaux','Sahut',"Likes, abonnés, avis des pairs utilisés pour juger un contenu."],
+['Autorité cognitive','Simonnot',"Confiance accordée à une source jugée compétente (Wilson, 1983)."],['Économie de l\'attention','Simonnot',"On passe de la rareté de l'information à la rareté de l'attention (H. Simon)."],['Jugement prédictif / évaluatif','Simonnot',"Choisir de consulter une info / choisir de l'utiliser (Rieh)."],
+['Translittératie','Le Deuff',"Convergence des cultures documentaire, médiatique et informatique."],['Mythe des digital natives','Le Deuff',"Les jeunes ne naissent pas experts du numérique."],
+['Enseignement explicite','Macedo-Rouet',"Enseigner les critères, puis faire pratiquer avec guidage."],['Modèle de tâche','Macedo-Rouet',"Ce que l'élève comprend de la question oriente son évaluation (MD-TRACE)."],
+['Apprentissage adaptatif','Tricot',"Apprentissage implicite, sans effort, limité à ce qui est fréquent et utile."],['Déficit d\'utilité perçue','Tricot',"Les savoirs scolaires ne semblent pas utiles tout de suite aux élèves."],
+['Redocumentarisation','Salaün',"Retraiter les documents numériques grâce aux métadonnées."],['Infrastructures épistémiques','Salaün',"Bibliothèques, archives, musées : elles créent la confiance par la sélection."],
+['Troisième lieu','Servet',"Espace de sociabilité, ni foyer ni travail (Oldenburg)."],['Usager omnivore','Servet',"Usager aux goûts variés, sans hiérarchie culturelle."],
+['Société pédagogique','M. Serres',"Les médias, qui concurrencent l'école dans la transmission."],['Savoir distribué','M. Serres',"Le savoir est partout, plus seulement à l'école."],
+['Usages libres / prescrits','Durpaire',"Ce que les élèves font d'eux-mêmes au CDI / ce que l'école leur demande."],
+['Former / éduquer','Maury',"Former à l'info-doc (son domaine), contribuer à éduquer à l'EMI (partagé)."],
+['Métasavoir','Blanquet',"Savoir de base pour toutes les disciplines, plutôt qu'une discipline."],['Instruire / montrer','Blanquet',"Les deux sens d'enseigner : à l'école / hors de l'école."],
+['Espace par intention / à réception','Fabre',"Le CDI pensé par le prof doc / le CDI vécu par les élèves."],['Didactiser l\'espace','Fabre',"Apprendre aux élèves comment et pourquoi le CDI est organisé."],
+['Illusion ingénierique','Calenge',"Croire que les outils sont le but et oublier ce qui ne se mesure pas."],['Stock / flux','Calenge',"Documents physiques / ressources en ligne."],
+['Reliance','Cordier & Stalder',"Relier des univers différents (Morin)."],['Autodidaxie générationnelle','Aillerie',"L'idée, contestée, que les jeunes apprennent seuls le numérique."]
+].map((c,i)=>({id:'c'+i,t:c[0],w:c[1],d:c[2]}));
+
+/* ======================= OUTILS ======================= */
+function norm(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[’']/g," ").replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function pick(a,n){return shuf(a).slice(0,n)}
+const KEY='capesdoc_revision_v1';let ST={};
+try{ST=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){ST={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+function rec(id,ok){const s=ST[id]||{ok:0,ko:0,b:0};ok?(s.ok++,s.b=Math.min(4,s.b+1)):(s.ko++,s.b=0);ST[id]=s;save();renderStats()}
+function weight(id){const s=ST[id];if(!s)return 3;return [5,3,2,1,.4][s.b]}
+function wpick(items,n){const pool=items.map(x=>({x,w:weight(x.id)*Math.random()}));return pool.sort((a,b)=>b.w-a.w).slice(0,n).map(p=>p.x)}
+
+const DOMS=[['textes','17 textes de recherche'],['bordereau','Documents du bordereau'],['notions','Notions info-doc'],['officiel','Textes officiels, EMI, CRCN'],['epreuve',"L'épreuve écrite"]];
+let ON=new Set(DOMS.map(d=>d[0]));
+try{const d=JSON.parse(localStorage.getItem(KEY+'_d')||'null');if(d&&d.length)ON=new Set(d)}catch(e){}
+
+/* ======================= CARTES ======================= */
+function buildCards(){
+  const C=[];
+  T.forEach(t=>{
+    C.push({id:'k-'+t.id,dom:'textes',tag:'Auteur → titre et thèse',front:`${t.a} (${t.y})`,back:`<p><b>« ${esc(t.ti)} »</b><br><span class="muted">${esc(t.s)}</span></p><p><mark>${esc(t.these)}</mark></p><ul>${t.id3.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="muted"><b>À mobiliser :</b> ${esc(t.mob)}</p>`});
+    C.push({id:'kt-'+t.id,dom:'textes',tag:'Thèse → qui, quand ?',front:t.these,back:`<p><b>${esc(t.a)}</b>, ${t.y}<br>« ${esc(t.ti)} »</p><p class="muted">Concepts : ${t.kw.map(esc).join(' · ')}</p>`});
+  });
+  CONC.forEach(c=>C.push({id:'kc-'+c.id,dom:c.w.includes('&')||c.w=='Aillerie'?'bordereau':'textes',tag:'Concept → auteur et définition',front:c.t,back:`<p><b>${esc(c.w)}</b></p><p><mark>${esc(c.d)}</mark></p>`}));
+  E.forEach(e=>C.push({id:'k-'+e.id,dom:'bordereau',tag:'Document du bordereau',front:`${e.a} : « ${e.ti} »`,back:`<p><b>${esc(e.d)}</b></p><p>${esc(e.c)}</p>`}));
+  N.forEach(n=>C.push({id:'k-'+n.id,dom:'notions',tag:'Notion organisatrice',front:n.n,back:`<p><mark>${esc(n.p)}</mark></p><p><b>Ses 8 sous-notions :</b> ${esc(n.s)}</p><p><b>Distinction clé :</b> ${esc(n.dk)}</p><p><b>En classe :</b> ${esc(n.ex)}</p><p class="muted"><b>Auteurs :</b> ${esc(n.au)}</p>`}));
+  REP.forEach(r=>C.push({id:'k-'+r.id,dom:'notions',tag:'Repères sur les notions',front:r.n,back:`<p><mark>${esc(r.c)}</mark></p><ul>${r.id3.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`}));
+  N.forEach(n=>C.push({id:'kx-'+n.id,dom:'notions',tag:'Exemple en classe → quelle notion ?',front:n.ex,back:`<p><b>${esc(n.n)}</b></p><p class="muted">${esc(n.dk)}</p>`}));
+  V.forEach(v=>C.push({id:'k-'+v.id,dom:'notions',tag:'Vocabulaire didactique',front:v.t,back:`<p><b>${esc(v.w)}</b></p><p>${esc(v.d)}</p>`}));
+  O.forEach(o=>C.push({id:'k-'+o.id,dom:'officiel',tag:'Texte officiel',front:o.n,back:`<p><b>${esc(o.d)}</b></p><p><mark>${esc(o.c)}</mark></p><ul>${o.id3.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="muted"><b>À mobiliser :</b> ${esc(o.mob)}</p>`}));
+  QH.filter(q=>q[0]=='epreuve').forEach((q,i)=>C.push({id:'ke'+i,dom:'epreuve',tag:"L'épreuve",front:q[1],back:`<p><b>${q[3].map(j=>esc(q[2][j])).join(' ; ')}</b></p><p class="muted">${esc(q[4])}</p>`}));
+  return C;
+}
+const CARDS=buildCards();
+
+/* ======================= QCM ======================= */
+function buildQ(){
+  const Q=QH.map((q,i)=>({id:'q'+i,dom:q[0],q:q[1],ch:q[2],a:q[3],e:q[4]}));
+  T.forEach(t=>{
+    const others=pick(T.filter(x=>x!==t),3);
+    Q.push({id:'qa-'+t.id,dom:'textes',q:`Qui a écrit « ${t.ti} » ?`,ch:[t.a,...others.map(o=>o.a)],a:[0],e:`${t.a}, ${t.y}, ${t.s}.`});
+    const yrs=[...new Set(T.map(x=>x.y).filter(y=>y!==t.y))];
+    Q.push({id:'qy-'+t.id,dom:'textes',q:`En quelle année paraît le texte de ${t.a} « ${t.ti} » ?`,ch:[String(t.y),...pick(yrs,3).map(String)],a:[0],e:`${t.y}.`});
+    Q.push({id:'qt-'+t.id,dom:'textes',q:`Quelle est la thèse de ${t.a} (${t.y}) ?`,ch:[t.these,...others.map(o=>o.these)],a:[0],e:t.mob});
+  });
+  E.forEach(e=>{const o=pick(E.filter(x=>x!==e),3);Q.push({id:'qa-'+e.id,dom:'bordereau',q:`De quel document parle-t-on ? « ${e.c} »`,ch:[`${e.k} – ${e.ti}`,...o.map(x=>`${x.k} – ${x.ti}`)],a:[0],e:`${e.a}, ${e.d}.`})});
+  O.forEach(o=>{const yrs=[...new Set(O.map(x=>x.y).filter(y=>y!==o.y))];Q.push({id:'qy-'+o.id,dom:'officiel',q:`En quelle année : ${o.n} ?`,ch:[String(o.y),...pick(yrs,3).map(String)],a:[0],e:o.d})});
+  return Q;
+}
+const QS=buildQ();
+
+/* ======================= TROUS ======================= */
+const TROUS=[...T.map(t=>({id:'tr-'+t.id,dom:'textes',s:t.trou,r:t.rep,e:`${t.a}, ${t.y}`})),
+{id:'tr1',dom:'notions',s:"Le passage d'un savoir savant à un savoir enseignable s'appelle la transposition ___ (Chevallard).",r:['didactique'],e:'Chevallard'},
+{id:'tr2',dom:'notions',s:"Les 7 notions organisatrices sont fixées par la ___ en mars 2007.",r:['fadben','apden'],e:'FADBEN, aujourd\'hui APDEN'},
+{id:'tr3',dom:'notions',s:"Duplessis (2017) voit un triple enjeu : épistémologique, pédagogique et ___.",r:['psychologique'],e:'Duplessis 2017'},
+{id:'tr4',dom:'officiel',s:"La circulaire de missions date du 28 mars ___.",r:['2017'],e:'n° 2017-051'},
+{id:'tr5',dom:'officiel',s:"Le CRCN remplace le ___ depuis la rentrée 2019.",r:['b2i'],e:'Décret du 30 août 2019'},
+{id:'tr6',dom:'officiel',s:"Le prof doc est « enseignant et maître d'œuvre de l'acquisition par les élèves d'une culture de l'information et des ___ ».",r:['medias'],e:'Circulaire 2017, axe 1'},
+{id:'tr7',dom:'officiel',s:"La circulaire EMI de 2022 prévoit « une webradio, un ___ » dans chaque collège.",r:['parrain'],e:'Circulaire du 24 janvier 2022'},
+{id:'tr8',dom:'officiel',s:"Le rapport Bronner s'intitule « Les Lumières à l'ère ___ ».",r:['numerique'],e:'Janvier 2022'},
+{id:'tr9',dom:'bordereau',s:"Cordier et Stalder empruntent à Edgar Morin la notion de ___.",r:['reliance'],e:'E2, 2017'},
+{id:'tr10',dom:'bordereau',s:"Aillerie remet en cause l'« autodidaxie ___ ».",r:['generationnelle'],e:'E10, 2010'},
+{id:'tr11',dom:'bordereau',s:"Boubée pointe le risque d'___ de l'info-doc dans l'EMI.",r:['invisibilisation'],e:'E3, 2019'},
+{id:'tr12',dom:'epreuve',s:"L'épreuve écrite du CAPES interne dure ___ heures.",r:['5','cinq'],e:'Coefficient 1'}];
+
+/* ======================= RELIER ======================= */
+function pairSets(){
+  const P=[];
+  if(ON.has('textes')){P.push({n:'Auteur ↔ titre',dom:'textes',p:T.map(t=>({id:'m-ti-'+t.id,l:t.a,r:t.ti}))});
+    P.push({n:'Auteur ↔ thèse',dom:'textes',p:T.map(t=>({id:'m-th-'+t.id,l:t.a,r:t.these}))});
+    P.push({n:'Concept ↔ auteur',dom:'textes',p:CONC.map(c=>({id:'m-'+c.id,l:c.t,r:c.w})),uniqR:true});
+    P.push({n:'Concept ↔ définition',dom:'textes',p:CONC.map(c=>({id:'m-d'+c.id,l:c.t,r:c.d}))});}
+  if(ON.has('bordereau'))P.push({n:'Document ↔ contenu',dom:'bordereau',p:E.map(e=>({id:'m-'+e.id,l:e.k,r:e.c}))});
+  if(ON.has('notions')){P.push({n:'Notion ↔ définition',dom:'notions',p:N.map(n=>({id:'m-'+n.id,l:n.n,r:n.p}))});
+    P.push({n:'Notion ↔ sous-notions',dom:'notions',p:N.map(n=>({id:'m-s'+n.id,l:n.n,r:n.s}))});
+    P.push({n:'Notion ↔ exemple en classe',dom:'notions',p:N.map(n=>({id:'m-x'+n.id,l:n.n,r:n.ex}))});
+    P.push({n:'Terme didactique ↔ auteur',dom:'notions',p:V.map(v=>({id:'m-'+v.id,l:v.t,r:v.w})),uniqR:true});}
+  if(ON.has('officiel')){P.push({n:'Texte officiel ↔ date',dom:'officiel',p:O.map(o=>({id:'m-'+o.id,l:o.n,r:o.d}))});
+    P.push({n:'Texte officiel ↔ contenu',dom:'officiel',p:O.map(o=>({id:'m-c'+o.id,l:o.n,r:o.c}))});}
+  return P;
+}
+
+/* ======================= RENDU ======================= */
+const VIEWS=[['accueil','Accueil'],['cartes','Cartes'],['qcm','QCM à cocher'],['relier','Relier'],['trous','Textes à trous'],['chrono','Chronologie'],['debats','Débats'],['ouvertes','Questions ouvertes'],['mobiliser','Mobiliser pour un sujet'],['fiches','Toutes les fiches'],['faibles','Mes points faibles'],['sauvegarde','Sauvegarde']];
+const $=s=>document.querySelector(s);const view=$('#view');
+$('#tabs').innerHTML=VIEWS.map(v=>`<button class="tab" id="tab-${v[0]}" data-v="${v[0]}">${v[1]}</button>`).join('');
+function renderDoms(){$('#doms').innerHTML=DOMS.map(d=>`<button class="chip" data-d="${d[0]}" aria-pressed="${ON.has(d[0])}">${d[1]}</button>`).join('')}
+function inDom(x){return ON.has(x.dom)}
+function renderStats(){
+  const ids=Object.keys(ST);const ok=ids.filter(i=>ST[i].b>=3).length;const weak=ids.filter(i=>ST[i].ko>ST[i].ok).length;
+  const tot=ids.reduce((a,i)=>a+ST[i].ok+ST[i].ko,0),good=ids.reduce((a,i)=>a+ST[i].ok,0);
+  const pct=tot?Math.round(good/tot*100):0;
+  $('#stats').innerHTML=`<div class="stat"><b>${tot}</b><span>réponses données</span></div><div class="stat"><b>${pct} %</b><span>de réussite</span><div class="bar"><i style="width:${pct}%"></i></div></div><div class="stat"><b>${ok}</b><span>éléments bien ancrés</span></div><div class="stat"><b>${weak}</b><span>points faibles</span></div>`;
+}
+function pileCard(){const c=pick(CARDS.filter(inDom).length?CARDS.filter(inDom):CARDS,1)[0];$('#pileCard').innerHTML=`<small>${esc(c.tag)}</small><div class="q">${esc(c.front.length>80?c.front.slice(0,78)+'…':c.front)}</div><small>Touche « Cartes » pour retourner la fiche</small>`}
+
+let cur='accueil';
+function go(v){cur=v;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-current',b.dataset.v===v));R[v]();}
+const R={};
+R.accueil=()=>{view.innerHTML=`<h2>Par où commencer ?</h2><p class="lead">Choisis en haut les domaines à réviser, puis un exercice. Les éléments ratés reviennent plus souvent ; ceux que tu réussis trois fois de suite s'espacent.</p>
+<div class="grid2">${[
+['cartes','Cartes','Mémoriser auteur, titre, date, thèse : tu retournes la fiche et tu dis honnêtement si tu savais.'],
+['qcm','QCM à cocher','Une ou plusieurs bonnes réponses : vérifier que tu reconnais.'],
+['relier','Relier','Associer auteurs, titres, thèses, concepts, textes officiels et dates.'],
+['trous','Textes à trous','Retrouver le mot exact : celui que le jury attend.'],
+['chrono','Chronologie','Remettre textes et textes officiels dans l\'ordre.'],
+['debats','Débats','Ranger les auteurs dans les camps : la base d\'une copie qui fait dialoguer.'],
+['ouvertes','Questions ouvertes','Rédiger de mémoire, puis comparer aux mots-clés attendus.'],
+['mobiliser','Mobiliser pour un sujet','Face à un sujet, choisir tes auteurs et ta problématique, puis comparer.']
+].map(x=>`<button class="opt" data-go="${x[0]}" style="display:block"><b class="big" style="font-size:18px">${x[1]}</b><br><span class="muted">${x[2]}</span></button>`).join('')}</div>
+<details style="margin-top:18px"><summary>Une routine de 20 minutes</summary><ol><li>5 min de cartes sur les textes.</li><li>Un relier « Auteur ↔ thèse ».</li><li>Un débat.</li><li>Une question ouverte ou un sujet à mobiliser.</li><li>Pour finir, « Mes points faibles ».</li></ol></details>`};
+
+/* Cartes */
+let cq=[],ci=0;
+R.cartes=(list)=>{cq=list||wpick(CARDS.filter(inDom),20);ci=0;showCard()};
+function showCard(){
+  if(!cq.length){view.innerHTML='<p>Aucune carte : active au moins un domaine en haut.</p>';return}
+  if(ci>=cq.length){view.innerHTML=`<h2>Série terminée</h2><p class="lead">Les cartes « à revoir » reviendront en priorité.</p><div class="row"><button class="btn" data-act="cartes-new">Nouvelle série</button></div>`;return}
+  const c=cq[ci];
+  view.innerHTML=`<div class="row" style="margin:0 0 12px"><span class="cnt">Carte ${ci+1} / ${cq.length}</span></div>
+  <div class="fc" id="fc" tabindex="0" role="button" aria-label="Retourner la carte"><span class="tag">${esc(c.tag)}</span><div class="front">${esc(c.front)}</div><div class="back" id="back" hidden>${c.back}</div></div>
+  <div class="row" id="cardBtns"><button class="btn" data-act="flip">Retourner la carte</button><span class="muted">Essaie d'abord de répondre à voix haute ou de tête.</span></div>`;
+}
+function flip(){const b=$('#back');if(!b||!b.hidden)return;b.hidden=false;$('#cardBtns').innerHTML=`<button class="btn ok" data-act="know">Je savais</button><button class="btn ko" data-act="dunno">À revoir</button>`}
+
+/* QCM */
+let qq=[],qi=0,qsel=new Set(),qscore=0,qdone=false;
+R.qcm=(list)=>{qq=list||wpick(QS.filter(inDom),12);qi=0;qscore=0;showQ()};
+function showQ(){
+  if(!qq.length){view.innerHTML='<p>Aucune question : active au moins un domaine.</p>';return}
+  if(qi>=qq.length){view.innerHTML=`<h2>${qscore} / ${qq.length}</h2><p class="lead">${qscore/qq.length>=.8?'Très solide.':'Les questions ratées reviendront plus souvent.'}</p><div class="row"><button class="btn" data-act="qcm-new">Nouvelle série</button></div>`;return}
+  const q=qq[qi];qsel=new Set();qdone=false;
+  if(!q.order)q.order=shuf(q.ch.map((_,i)=>i));
+  view.innerHTML=`<span class="cnt">Question ${qi+1} / ${qq.length}${q.a.length>1?' · plusieurs réponses':''}</span><h2 style="margin-top:8px">${esc(q.q)}</h2>
+  <div id="opts">${q.order.map(i=>`<button class="opt" data-o="${i}"><span class="box"></span><span>${esc(q.ch[i])}</span></button>`).join('')}</div>
+  <div class="row" id="qbtn"><button class="btn" data-act="qcheck">Valider</button></div><div id="qfb"></div>`;
+}
+function qcheck(){
+  const q=qq[qi];qdone=true;const ok=q.a.length===qsel.size&&q.a.every(i=>qsel.has(i));
+  document.querySelectorAll('#opts .opt').forEach(b=>{const i=+b.dataset.o;if(q.a.includes(i))b.classList.add('good');else if(qsel.has(i))b.classList.add('bad')});
+  if(ok)qscore++;rec(q.id,ok);
+  $('#qfb').innerHTML=`<div class="fb ${ok?'good':'bad'}"><b>${ok?'Exact.':'Pas tout à fait.'}</b> ${esc(q.e||'')}</div>`;
+  $('#qbtn').innerHTML=`<button class="btn" data-act="qnext">Question suivante</button>`;
+}
+
+/* Relier */
+let M=null;
+R.relier=(setIdx)=>{
+  const sets=pairSets();if(!sets.length){view.innerHTML='<p>Active un domaine (textes, bordereau, notions ou officiels).</p>';return}
+  const si=typeof setIdx==='number'?setIdx%sets.length:Math.floor(Math.random()*sets.length);const S=sets[si];
+  let pool=wpick(S.p,S.p.length);const used=new Set(),pairs=[];
+  for(const p of pool){if(pairs.length>=5)break;if(used.has(p.r)||used.has('L'+p.l))continue;used.add(p.r);used.add('L'+p.l);pairs.push(p)}
+  M={S,si,sets,pairs,L:shuf(pairs),Rr:shuf(pairs),sel:null,done:new Set(),err:new Set()};drawM();
+};
+function drawM(){
+  const {S,sets,si}=M;
+  view.innerHTML=`<div class="row" style="margin:0 0 6px"><label class="muted" for="setSel">Type d'association</label><select id="setSel" class="chip">${sets.map((s,i)=>`<option value="${i}" ${i===si?'selected':''}>${esc(s.n)}</option>`).join('')}</select></div>
+  <p class="lead">Touche un élément à gauche, puis sa correspondance à droite.</p>
+  <div class="match"><div>${M.L.map(p=>`<button class="opt ${M.done.has(p.id)?'done':''} ${M.sel===p.id?'sel':''}" data-ml="${p.id}" >${esc(p.l)}</button>`).join('')}</div>
+  <div>${M.Rr.map(p=>`<button class="opt ${M.done.has(p.id)?'done':''}" data-mr="${p.id}" style="font-size:15px">${esc(p.r)}</button>`).join('')}</div></div>
+  <div id="mfb">${M.done.size===M.pairs.length?`<div class="fb good"><b>Tout est relié.</b> ${M.err.size?M.err.size+' erreur(s) en route : ces paires reviendront.':'Sans faute.'}</div><div class="row"><button class="btn" data-act="m-again">Nouvelle série</button></div>`:''}</div>`;
+}
+function mClickR(id,btn){
+  if(!M.sel||M.done.has(id))return;const lp=M.pairs.find(p=>p.id===M.sel),rp=M.pairs.find(p=>p.id===id);
+  if(lp.r===rp.r){M.done.add(M.sel);rec(M.sel,!M.err.has(M.sel));M.sel=null;drawM()}
+  else{M.err.add(M.sel);btn.classList.add('bad','shake');setTimeout(()=>btn.classList.remove('bad','shake'),500)}
+}
+
+/* Trous */
+let tq=[],ti=0;
+R.trous=()=>{tq=wpick(TROUS.filter(inDom),10);ti=0;showT()};
+function showT(){
+  if(!tq.length){view.innerHTML='<p>Aucune phrase pour ces domaines.</p>';return}
+  if(ti>=tq.length){view.innerHTML=`<h2>Série terminée</h2><div class="row"><button class="btn" data-act="t-new">Nouvelle série</button></div>`;return}
+  const t=tq[ti];const [a,b]=t.s.split('___');
+  view.innerHTML=`<span class="cnt">Phrase ${ti+1} / ${tq.length}</span><h2 style="margin-top:8px;font-weight:500;font-family:inherit">${esc(a)}<mark>&nbsp;?&nbsp;</mark>${esc(b||'')}</h2>
+  <form id="tform"><label class="muted" for="tin">Le mot manquant</label><input type="text" id="tin" autocomplete="off"><div class="row"><button class="btn">Vérifier</button><button type="button" class="btn sec" data-act="t-hint">Indice</button></div></form><div id="tfb"></div>`;
+  setTimeout(()=>$('#tin')&&$('#tin').focus(),30);
+}
+
+/* Chrono */
+let CH=null;
+R.chrono=()=>{
+  let pool=[];if(ON.has('textes'))pool.push(...T.map(t=>({id:'ch-'+t.id,l:`${t.k} – ${t.th}`,y:t.y})));
+  if(ON.has('bordereau'))pool.push(...E.map(e=>({id:'ch-'+e.id,l:`${e.k} – ${e.ti}`,y:e.y})));
+  if(ON.has('officiel'))pool.push(...O.map(o=>({id:'ch-'+o.id,l:o.n,y:o.y})));
+  if(pool.length<5){view.innerHTML='<p>Active « 17 textes », « bordereau » ou « textes officiels ».</p>';return}
+  const items=[],ys=new Set();for(const p of shuf(pool)){if(ys.has(p.y))continue;ys.add(p.y);items.push(p);if(items.length===5)break}
+  CH={items:shuf(items),seq:[],done:false};drawCH();
+};
+function drawCH(){
+  const sorted=CH.items.slice().sort((a,b)=>a.y-b.y);
+  view.innerHTML=`<h2>Du plus ancien au plus récent</h2><p class="lead">Touche les éléments dans l'ordre chronologique.</p>
+  <div>${CH.items.map(p=>{const k=CH.seq.indexOf(p);let cls='';if(CH.done)cls=sorted[k]===p?'good':'bad';return `<button class="opt ${k>=0?'sel':''} ${cls}" data-ch="${p.id}"><span class="box" style="display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px">${k>=0?k+1:''}</span><span>${esc(p.l)}${CH.done?` <b>(${p.y})</b>`:''}</span></button>`}).join('')}</div>
+  <div class="row">${CH.done?`<button class="btn" data-act="ch-new">Nouvelle série</button>`:`<button class="btn sec" data-act="ch-reset">Recommencer</button>`}</div>
+  ${CH.done?`<div class="fb">Ordre attendu : ${sorted.map(p=>`${esc(p.l)} (${p.y})`).join(' → ')}</div>`:''}`;
+}
+
+/* Débats */
+let DB=null;
+R.debats=()=>{const d=pick(DEB,1)[0];DB={d,pl:{},items:shuf(d.items),done:false,sel:null};drawDB()};
+function drawDB(){
+  const {d}=DB;const loose=DB.items.filter(it=>DB.pl[it[0]]===undefined);
+  view.innerHTML=`<span class="cnt">Débat</span><h2 style="margin-top:6px">${esc(d.q)}</h2><p class="lead">Touche un auteur, puis la colonne où il se range.</p>
+  <div>${loose.map(it=>`<button class="pill ${DB.sel===it[0]?'chip':''}" aria-pressed="${DB.sel===it[0]}" data-au="${esc(it[0])}">${esc(it[0])}</button>`).join('')||'<span class="muted">Tous les auteurs sont rangés.</span>'}</div>
+  <div class="cols">${d.cols.map((c,ci)=>`<div class="col" data-col="${ci}" role="button" tabindex="0"><h4>${esc(c)}</h4>${DB.items.filter(it=>DB.pl[it[0]]===ci).map(it=>`<span class="pill ${DB.done?(it[1]===ci?'good':'bad'):''}" data-back="${esc(it[0])}">${esc(it[0])}</span>`).join('')}</div>`).join('')}</div>
+  <div class="row">${DB.done?`<button class="btn" data-act="db-new">Autre débat</button>`:`<button class="btn" data-act="db-check" ${loose.length?'disabled style="opacity:.5"':''}>Vérifier</button>`}</div>
+  ${DB.done?`<div class="fb">${esc(d.e)}</div>`:''}`;
+}
+
+/* Ouvertes */
+let OQ=null;
+R.ouvertes=()=>{const pool=OPEN.map((o,i)=>({id:'x'+i,dom:o[0],q:o[1],k:o[2],m:o[3]})).filter(inDom);if(!pool.length){view.innerHTML='<p>Aucune question pour ces domaines.</p>';return}OQ=wpick(pool,1)[0];
+  view.innerHTML=`<span class="cnt">Question ouverte</span><h2 style="margin-top:6px">${esc(OQ.q)}</h2><label class="muted" for="oin">Ta réponse, de mémoire</label><textarea id="oin" placeholder="Écris comme dans ta copie : auteur, idée, concept…"></textarea>
+  <div class="row"><button class="btn" data-act="o-check">Comparer</button><button class="btn sec" data-act="o-new">Autre question</button></div><div id="ofb"></div>`};
+function ocheck(){
+  const v=norm($('#oin').value);const hits=OQ.k.map(alts=>alts.some(a=>v.includes(norm(a))));
+  const n=hits.filter(Boolean).length;
+  $('#ofb').innerHTML=`<div class="fb"><p><b>${n} / ${OQ.k.length} idées attendues retrouvées</b></p><p>${OQ.k.map((alts,i)=>`<span class="kw ${hits[i]?'y':'n'}">${hits[i]?'✓':'✗'} ${esc(alts[0])}</span>`).join('')}</p><p><b>Réponse modèle :</b> ${esc(OQ.m)}</p>
+  <div class="row"><span class="muted">Ton verdict :</span><button class="btn ok" data-act="o-ok">Je l'avais</button><button class="btn ko" data-act="o-ko">À retravailler</button></div></div>`;
+}
+
+/* Mobiliser */
+let SJ=null;
+const ALLAU=[...T.map(t=>t.k),'Aillerie','Boubée','Détrez','Parmentier'];
+R.mobiliser=()=>{SJ={s:pick(SUJ,1)[0],ch:new Set()};drawSJ()};
+function drawSJ(){
+  const s=SJ.s;
+  view.innerHTML=`<span class="cnt">Sujet de réflexion</span><h2 style="margin-top:6px">${esc(s.q)}</h2>
+  <p class="lead">1. Écris ta problématique. 2. Coche 3 à 5 auteurs que tu convoquerais. 3. Compare.</p>
+  <label class="muted" for="pbin">Ta problématique</label><input type="text" id="pbin" placeholder="Dans quelle mesure…">
+  <div style="margin-top:12px">${ALLAU.map(a=>`<button class="pill" data-sj="${esc(a)}" aria-pressed="${SJ.ch.has(a)}" style="${SJ.ch.has(a)?'background:var(--hlsoft);border-color:#c9a800':''}">${esc(a)}</button>`).join('')}</div>
+  <div class="row"><button class="btn" data-act="sj-check">Comparer avec une proposition</button><button class="btn sec" data-act="sj-new">Autre sujet</button></div><div id="sjfb"></div>`;
+}
+function sjcheck(){
+  const s=SJ.s;const exp=Object.keys(s.au);const hit=exp.filter(a=>SJ.ch.has(a));const extra=[...SJ.ch].filter(a=>!exp.includes(a));
+  rec(s.id,hit.length>=Math.min(3,exp.length));
+  $('#sjfb').innerHTML=`<div class="fb"><p><b>${hit.length} auteur(s) en commun sur ${exp.length} proposés.</b>${extra.length?` Tes autres choix (${extra.map(esc).join(', ')}) peuvent se défendre si tu sais dire ce qu'ils apportent.`:''}</p>
+  <p><b>Problématique possible :</b> ${esc(s.pb)}</p><p><b>Plan :</b></p><ul>${s.plan.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>
+  <p><b>Auteurs et ce qu'ils apportent :</b></p><ul>${exp.map(a=>`<li><span class="kw ${SJ.ch.has(a)?'y':'n'}">${esc(a)}</span> ${esc(s.au[a])}</li>`).join('')}</ul><p><b>Textes officiels :</b> ${esc(s.of)}</p></div>`;
+}
+
+/* Fiches */
+R.fiches=()=>{view.innerHTML=`<h2>Toutes les fiches</h2><label class="muted" for="fq">Chercher un auteur, un concept, une date</label><input type="text" id="fq" placeholder="ex. autorité cognitive, 2017, Fabre"><div id="flist" style="margin-top:14px"></div>`;drawF('')};
+function drawF(q){
+  const nq=norm(q);const m=x=>!nq||norm(x).includes(nq);
+  const tx=T.filter(t=>m(t.a+t.ti+t.y+t.these+t.kw.join(' ')+t.id3.join(' ')));
+  const ex=E.filter(e=>m(e.a+e.ti+e.d+e.c));const nx=N.filter(n=>m(n.n+n.p+n.s+n.id3.join(' ')+n.au+n.ex));const rx=REP.filter(r=>m(r.n+r.c+r.id3.join(' ')));const ox=O.filter(o=>m(o.n+o.d+o.c+o.y+o.id3.join(' ')));
+  $('#flist').innerHTML=(tx.length?'<h3>Textes de recherche</h3><div class="grid2">'+tx.map(t=>`<div class="fiche"><h3>${esc(t.a)} · ${t.y}</h3><div class="m">« ${esc(t.ti)} », ${esc(t.s)}</div><p><mark>${esc(t.these)}</mark></p><details><summary>Grosses idées</summary><ul>${t.id3.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="muted">${esc(t.mob)}</p></details></div>`).join('')+'</div>':'')+
+  (ex.length?'<h3>Documents du bordereau</h3><div class="grid2">'+ex.map(e=>`<div class="fiche"><h3>${esc(e.k)}</h3><div class="m">${esc(e.a)}, « ${esc(e.ti)} », ${esc(e.d)}</div><p>${esc(e.c)}</p></div>`).join('')+'</div>':'')+
+  (nx.length?'<h3>Notions organisatrices</h3><div class="grid2">'+nx.map(n=>`<div class="fiche"><h3>${esc(n.n)}</h3><p><mark>${esc(n.p)}</mark></p><p class="m"><b>Sous-notions :</b> ${esc(n.s)}</p><p class="m"><b>Distinction :</b> ${esc(n.dk)}</p><details><summary>Grosses idées</summary><ul>${n.id3.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p><b>En classe :</b> ${esc(n.ex)}</p><p class="muted"><b>Champ APDEN :</b> ${esc(n.champ)}</p><p class="muted"><b>Auteurs à mobiliser :</b> ${esc(n.au)}</p></details></div>`).join('')+'</div>':'')+
+  (rx.length?'<h3>Repères sur les notions</h3><div class="grid2">'+rx.map(r=>`<div class="fiche"><h3>${esc(r.n)}</h3><p><mark>${esc(r.c)}</mark></p><details><summary>Grosses idées</summary><ul>${r.id3.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="muted"><b>À mobiliser :</b> ${esc(r.mob)}</p></details></div>`).join('')+'</div>':'')+
+  (ox.length?'<h3>Textes officiels et de référence</h3><div class="grid2">'+ox.sort((a,b)=>a.y-b.y).map(o=>`<div class="fiche"><h3>${esc(o.n)}</h3><div class="m">${esc(o.d)}</div><p><mark>${esc(o.c)}</mark></p><details><summary>Grosses idées</summary><ul>${o.id3.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="muted"><b>À mobiliser :</b> ${esc(o.mob)}</p></details></div>`).join('')+'</div>':'')||'<p class="muted">Rien trouvé.</p>';
+}
+
+/* Points faibles */
+R.faibles=()=>{
+  const weak=Object.keys(ST).filter(i=>ST[i].b<2&&ST[i].ko>0);
+  const wc=CARDS.filter(c=>weak.includes(c.id)),wq=QS.filter(q=>weak.includes(q.id));
+  view.innerHTML=`<h2>Mes points faibles</h2><p class="lead">${weak.length?`${weak.length} élément(s) ratés récemment.`:'Rien pour l\'instant : fais quelques exercices et reviens ici.'}</p>
+  <div class="row">${wc.length?`<button class="btn" data-act="w-cards">Revoir ${wc.length} carte(s)</button>`:''}${wq.length?`<button class="btn" data-act="w-qcm">Refaire ${wq.length} question(s)</button>`:''}</div>
+  ${weak.length?`<div class="row"><button class="btn sec" data-act="reset">Remettre toute ma progression à zéro</button></div>`:''}<div id="rst"></div>`;
+};
+
+
+/* Sauvegarde */
+function exportCode(){return 'CAPESDOC1:'+btoa(unescape(encodeURIComponent(JSON.stringify(ST))))}
+function parseCode(t){t=String(t).trim();if(t.startsWith('{'))return JSON.parse(t);const i=t.indexOf(':');if(!t.startsWith('CAPESDOC1:'))throw new Error('format');return JSON.parse(decodeURIComponent(escape(atob(t.slice(i+1).replace(/\s/g,'')))))}
+function mergeST(o){let n=0;for(const id in o){const x=o[id];if(!x||typeof x.ok!=='number')continue;const y=ST[id];
+  if(!y){ST[id]={ok:x.ok|0,ko:x.ko|0,b:Math.min(4,x.b|0)};n++;continue}
+  const b=(x.ok+x.ko)>(y.ok+y.ko)?x.b:y.b;ST[id]={ok:Math.max(y.ok,x.ok),ko:Math.max(y.ko,x.ko),b:Math.min(4,b|0)};n++}
+  save();renderStats();return n}
+R.sauvegarde=()=>{
+  const n=Object.keys(ST).length;
+  view.innerHTML=`<h2>Passer d'un appareil à l'autre</h2><p class="lead">Ta progression reste dans ce navigateur. Pour la retrouver ailleurs : exporte ici, importe sur l'autre appareil. L'import fusionne les deux progressions, rien n'est écrasé.</p>
+  <h3>1. Exporter (${n} élément${n>1?'s':''} suivi${n>1?'s':''})</h3>
+  <div class="row" style="margin-top:6px"><button class="btn" data-act="sv-copy">Copier mon code</button><button class="btn sec" data-act="sv-file">Télécharger un fichier</button></div>
+  <label class="muted" for="svout" style="display:block;margin-top:12px">Ton code (tu peux aussi le sélectionner et le copier à la main, ou te l'envoyer par mail)</label>
+  <textarea id="svout" readonly style="min-height:90px;font-size:13px">${esc(exportCode())}</textarea>
+  <h3>2. Importer sur l'autre appareil</h3>
+  <label class="muted" for="svin">Colle ici le code copié</label><textarea id="svin" style="min-height:90px;font-size:13px" placeholder="CAPESDOC1:…"></textarea>
+  <div class="row"><button class="btn" data-act="sv-import">Importer le code</button><label class="btn sec" for="svf" style="display:inline-flex;align-items:center">Importer un fichier</label><input type="file" id="svf" accept=".txt,.json,text/plain,application/json" hidden></div>
+  <div id="svfb"></div>`};
+function svMsg(ok,t){$('#svfb').innerHTML=`<div class="fb ${ok?'good':'bad'}">${esc(t)}</div>`}
+function svImport(txt){try{const n=mergeST(parseCode(txt));R.sauvegarde();svMsg(true,`Import réussi : ${n} élément(s) fusionné(s). Ta progression est à jour.`)}catch(e){svMsg(false,"Ce code n'est pas reconnu. Vérifie qu'il est complet, du début « CAPESDOC1: » jusqu'au dernier caractère.")}}
+document.addEventListener('change',e=>{if(e.target.id!=='svf'||!e.target.files[0])return;const r=new FileReader();r.onload=()=>svImport(r.result);r.readAsText(e.target.files[0]);e.target.value=''});
+/* ======================= ÉVÉNEMENTS ======================= */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button,[data-back],[data-col],.fc');if(!b)return;
+  if(b.dataset.v){location.hash=b.dataset.v;return}
+  if(b.dataset.go){location.hash=b.dataset.go;return}
+  if(b.dataset.d){const d=b.dataset.d;ON.has(d)?ON.delete(d):ON.add(d);if(!ON.size)ON.add(d);try{localStorage.setItem(KEY+'_d',JSON.stringify([...ON]))}catch(er){}renderDoms();pileCard();if(cur!=='accueil')go(cur);return}
+  if(b.id==='fc'){flip();return}
+  if(b.dataset.o!==undefined&&!qdone){const i=+b.dataset.o;const q=qq[qi];if(q.a.length===1){qsel=new Set([i]);document.querySelectorAll('#opts .opt').forEach(x=>x.classList.toggle('sel',+x.dataset.o===i))}else{qsel.has(i)?qsel.delete(i):qsel.add(i);b.classList.toggle('sel')}return}
+  if(b.dataset.ml){if(M.done.has(b.dataset.ml))return;M.sel=b.dataset.ml;drawM();return}
+  if(b.dataset.mr){mClickR(b.dataset.mr,b);return}
+  if(b.dataset.ch&&!CH.done){const p=CH.items.find(x=>x.id===b.dataset.ch);const k=CH.seq.indexOf(p);if(k>=0)CH.seq.splice(k,1);else CH.seq.push(p);
+    if(CH.seq.length===CH.items.length){CH.done=true;const s=CH.items.slice().sort((a,c)=>a.y-c.y);CH.seq.forEach((p,i)=>rec(p.id,s[i]===p));CH.items=CH.seq.slice()}drawCH();return}
+  if(b.dataset.au&&!DB.done){DB.sel=b.dataset.au;drawDB();return}
+  if(b.dataset.col!==undefined&&DB&&!DB.done&&DB.sel){DB.pl[DB.sel]=+b.dataset.col;DB.sel=null;drawDB();return}
+  if(b.dataset.back&&DB&&!DB.done){delete DB.pl[b.dataset.back];drawDB();return}
+  if(b.dataset.sj){const a=b.dataset.sj;SJ.ch.has(a)?SJ.ch.delete(a):SJ.ch.add(a);const pb=$('#pbin').value;drawSJ();$('#pbin').value=pb;return}
+  const act=b.dataset.act;if(!act)return;
+  ({flip,know(){rec(cq[ci].id,true);ci++;showCard()},dunno(){rec(cq[ci].id,false);cq.push(cq[ci]);ci++;showCard()},'cartes-new':()=>R.cartes(),
+   qcheck(){if(!qsel.size)return;qcheck()},qnext(){qi++;showQ()},'qcm-new':()=>R.qcm(),
+   'm-again':()=>R.relier(M.si),
+   't-hint'(){const t=tq[ti];$('#tfb').innerHTML=`<div class="fb">Commence par « ${esc(t.r[0].slice(0,2))}… » · ${esc(t.e)}</div>`},'t-new':()=>R.trous(),
+   'ch-reset'(){CH.seq=[];drawCH()},'ch-new':()=>R.chrono(),
+   'db-check'(){DB.done=true;DB.items.forEach(it=>rec(DB.d.id+'-'+it[0],DB.pl[it[0]]===it[1]));drawDB()},'db-new':()=>R.debats(),
+   'o-check':ocheck,'o-new':()=>R.ouvertes(),'o-ok'(){rec(OQ.id,true);R.ouvertes()},'o-ko'(){rec(OQ.id,false);R.ouvertes()},
+   'sj-check':sjcheck,'sj-new':()=>R.mobiliser(),
+   'w-cards'(){const weak=Object.keys(ST).filter(i=>ST[i].b<2&&ST[i].ko>0);R.cartes(shuf(CARDS.filter(c=>weak.includes(c.id))))},
+   'w-qcm'(){const weak=Object.keys(ST).filter(i=>ST[i].b<2&&ST[i].ko>0);R.qcm(shuf(QS.filter(q=>weak.includes(q.id))))},
+   reset(){$('#rst').innerHTML=`<div class="fb bad">Tout effacer ? <button class="btn ko" data-act="reset-yes">Oui, effacer</button></div>`},
+   'reset-yes'(){ST={};save();renderStats();R.faibles()},
+   async 'sv-copy'(){const t=exportCode();try{await navigator.clipboard.writeText(t);svMsg(true,'Code copié. Colle-le dans « Importer » sur ton autre appareil.')}catch(e){const a=$('#svout');a.focus();a.select();svMsg(true,'Le code est sélectionné : copie-le avec Ctrl+C (ou un appui long sur téléphone).')}},
+   'sv-file'(){try{const d=new Date().toISOString().slice(0,10);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([exportCode()],{type:'text/plain'}));a.download=`progression-capes-doc-${d}.txt`;document.body.appendChild(a);a.click();a.remove();svMsg(true,'Fichier téléchargé.')}catch(e){svMsg(false,'Téléchargement impossible ici : utilise « Copier mon code ».')}},
+   'sv-import'(){const t=$('#svin').value;if(t.trim())svImport(t)}
+  }[act]||(()=>{}))();
+});
+document.addEventListener('submit',e=>{if(e.target.id!=='tform')return;e.preventDefault();const t=tq[ti];const v=norm($('#tin').value);if(!v)return;
+  const ok=t.r.some(r=>v===norm(r)||v.includes(norm(r)));rec(t.id,ok);
+  $('#tfb').innerHTML=`<div class="fb ${ok?'good':'bad'}"><b>${ok?'Exact':'La réponse : '+esc(t.r[0])}</b> · ${esc(t.e)}</div><div class="row"><button class="btn" data-act="t-next" id="tnext">Phrase suivante</button></div>`;
+  $('#tnext').onclick=()=>{ti++;showT()};$('#tnext').focus()});
+document.addEventListener('change',e=>{if(e.target.id==='setSel')R.relier(+e.target.value)});
+document.addEventListener('input',e=>{if(e.target.id==='fq')drawF(e.target.value)});
+document.addEventListener('keydown',e=>{if(e.target.id==='fc'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();flip()}
+  if(e.target.dataset&&e.target.dataset.col!==undefined&&e.key==='Enter')e.target.click()});
+function route(){const h=location.hash.slice(1);go(VIEWS.some(v=>v[0]===h)?h:'accueil')}
+window.addEventListener('hashchange',route);
+renderDoms();renderStats();pileCard();route();
+}
+</script>
+</body>
+</html>
